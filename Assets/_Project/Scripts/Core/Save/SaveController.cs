@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,43 +8,51 @@ using UnityEngine;
 /// </summary>
 public class SaveController : MonoBehaviour
 {
+    [Header("Databases")] 
+    public ItemDatabase itemDatabase;
+    
     private string _savePath;
     private CinemachineConfiner2D _confiner;
 
     private void Awake()
     {
-        // 1. Find the Cinemachine Confiner 2D in the scene
+        // Find the Cinemachine Confiner 2D in the scene
         _confiner = GameObject.FindAnyObjectByType<CinemachineConfiner2D>();   
         
-        // 2. Define where the save file lives "persistentDataPath" is a special unity folder
+        // Define where the save file lives "persistentDataPath" is a special unity folder
         // that works across Windows, Mac, Andriod, and IOS
         _savePath = Path.Combine(Application.persistentDataPath, "Save.json");
         
-        // 3. Load the game at start
+        // Ensure item database is ready before loading
+        if (itemDatabase != null) itemDatabase.Initialize();
+        // Load the game at start
         LoadGame();
     }
 
     public void SaveGame()
     {
-        // 1. Locate the player object in the scene using its tag
+        // Locate the player object in the scene using its tag
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         // Exit early if no player or confiner
         if (player == null || _confiner == null) return;
         
-        // 2. Create a new instance of our data container and fill it with current info
+        // Create a new instance of our data container and fill it with current info
         SaveData saveData = new SaveData
         {
             playerPosition = player.transform.position,
             
             // If the camera has a boundary assigned, save its name so we can find it again
-            mapBoundaryName = _confiner.BoundingShape2D != null? _confiner.BoundingShape2D.gameObject.name : ""
+            mapBoundaryName = _confiner.BoundingShape2D != null? _confiner.BoundingShape2D.gameObject.name : "",
+            
+            // Get the inventory data
+            inventoryData = InventoryManager.Instance.GetInventorySaveData()
         };
 
-        // 3. Convert the SaveData object into a JSON string (text)
+        // Convert the SaveData object into a JSON string (text)
         string json = JsonUtility.ToJson(saveData);
         
-        // 4. Write that text to the hard drive file location _savePath
+        // Write that text to the hard drive file location _savePath
         File.WriteAllText(_savePath, json);
         
         Debug.Log("Game Saved to: {_savePath}");
@@ -74,6 +83,13 @@ public class SaveController : MonoBehaviour
                     _confiner.InvalidateBoundingShapeCache();//Recalculates bounding shape
                 }
             }
+            
+            // ---> LOAD the inventory data
+            if (InventoryManager.Instance != null && itemDatabase != null)
+            {
+                InventoryManager.Instance.LoadInventoryData(saveData.inventoryData, itemDatabase);
+            }
+            
             Debug.Log("Game Loaded!");
         }
         else

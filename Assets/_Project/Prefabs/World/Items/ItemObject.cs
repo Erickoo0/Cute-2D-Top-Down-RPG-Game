@@ -4,33 +4,35 @@ using UnityEngine;
 public class ItemObject : MonoBehaviour
 {
     [Header("Settings")] 
-    [SerializeField] private ItemData itemData; // Leave blank unless we want to manually add item to the world at the start of game
-    
+    [SerializeField] private ItemData startingItemData; // Used ONLY when placing items manually via the editor
+
+    private ItemInstance _itemInstance;
     private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         
-        // If we assigned itemData in the inspector, then initialize it
-        if (itemData != null) InitializeItem(itemData);
+        // If we assigned starting item in the inspector, then initialize it
+        if (startingItemData != null) InitializeItem(new ItemInstance(startingItemData));
+        
     }
 
     /// <summary>
-    /// Updates the <see cref="ItemObject"/> data with the new item data
+    /// Updates the object with an existing instance (used when dropping items)
     /// </summary>
-    public void InitializeItem(ItemData newItemData)
+    public void InitializeItem(ItemInstance newItemInstance)
     {
-        itemData = newItemData;
-        _spriteRenderer.sprite = itemData.itemIcon;
-        gameObject.name = itemData.itemName;
+        _itemInstance = newItemInstance;
+        _spriteRenderer.sprite = _itemInstance.Data.itemIcon;
+        gameObject.name = _itemInstance.Data.itemName;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && _itemInstance != null)
         {
-            bool wasPickedUp = InventoryManager.Instance.AddItems(itemData);
+            bool wasPickedUp = InventoryManager.Instance.AddItems(_itemInstance);
             
             if (wasPickedUp)
             {

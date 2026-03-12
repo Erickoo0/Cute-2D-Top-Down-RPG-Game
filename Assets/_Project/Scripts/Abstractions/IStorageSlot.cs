@@ -2,7 +2,8 @@ using UnityEngine;
 
 public interface IStorageSlot
 {
-    ItemData Item { get; }
+    ItemInstance Item { get; }
     int Index { get; }
-    void UpdateSlot(ItemData newItem);
+    void UpdateSlot(ItemInstance newItem);
+    void SetIconVisibility(bool state);
 }

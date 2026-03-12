@@ -72,9 +72,11 @@ public class DragManager : MonoBehaviour
         if (_sourceSlot != null && _sourceSlot.Item != null)
         {
             // Takes the item from source slot and enables ghost icon
-            _ghostIcon.sprite = _sourceSlot.Item.itemIcon;
+            _ghostIcon.sprite = _sourceSlot.Item.Data.itemIcon;
             _ghostIcon.enabled = true;
             _ghostIcon.transform.position = _currentMousePosition;
+            
+            _sourceSlot.SetIconVisibility(false);
         }
     }
 

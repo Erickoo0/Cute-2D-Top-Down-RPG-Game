@@ -11,7 +11,7 @@ public class InventoryUI : MonoBehaviour
     public Transform slotParent; // The Grid Layout Group
     
     // Keep a list of Slot scripts we created
-    private List<Slot> slotScriptsList = new List<Slot>();
+    private readonly List<Slot> _slotScriptsList = new List<Slot>();
 
     private void Start()
     {
@@ -45,17 +45,17 @@ public class InventoryUI : MonoBehaviour
             Slot slotScript = slot.GetComponent<Slot>(); // Find the Slot Prefabs Slot Script
 
             slotScript.slotScriptIndex = i; // Assign each slot an index number from the for loop
-            slotScriptsList.Add(slotScript); // Add the slotscript to a list
+            _slotScriptsList.Add(slotScript); // Add the slotscript to a list
         }
     }
 
     private void RefreshSlotUI(int index)
     {
         // Get items from item list in InventoryManager.cs
-        ItemData newData = InventoryManager.Instance.itemsList[index];
+        ItemInstance newData = InventoryManager.Instance.itemsList[index];
         
         // Tells the slot script to update its data
-        slotScriptsList[index].UpdateSlot(newData);
+        _slotScriptsList[index].UpdateSlot(newData);
     }
     
 }
