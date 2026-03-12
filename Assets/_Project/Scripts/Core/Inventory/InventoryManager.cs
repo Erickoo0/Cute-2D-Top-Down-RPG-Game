@@ -78,4 +78,21 @@ public class InventoryManager : MonoBehaviour
         OnSlotUpdated?.Invoke(indexA);
         OnSlotUpdated?.Invoke(indexB);
     }
+
+    public void DropItems(int index, Vector3 spawnPosition)
+    {
+        // Safety Check: Make sure the slot is not already empty
+        if (!itemsList[index]) return;
+        
+        // Spawn the item
+        GameObject droppedItem = Instantiate(itemsList[index].itemObject, spawnPosition,  Quaternion.identity );
+        if (droppedItem.TryGetComponent(out ItemObject itemObject))
+        {
+            itemObject.InitializeItem(itemsList[index]);
+        }
+        
+        // Clear the slot and notify the UI
+        itemsList[index] = null;
+        OnSlotUpdated?.Invoke(index);
+    }
 }

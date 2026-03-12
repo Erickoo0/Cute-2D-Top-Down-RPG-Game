@@ -6,6 +6,6 @@ public class ItemData : ScriptableObject
     [Header("Item Data")]
     public string itemName;
     public Sprite itemIcon;
-    public GameObject itemPrefab;
+    public GameObject itemObject; // The physical item that gets picked up
     [TextArea] public string itemDescription;
 }

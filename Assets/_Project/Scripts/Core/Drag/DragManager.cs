@@ -93,19 +93,29 @@ public class DragManager : MonoBehaviour
         //Find the target slot
         IStorageSlot targetSlot = GetSlotUnderMouse();
 
-        // Checks if dropped on a valid slot
+        // Swap Items Logic
         if (targetSlot != null && targetSlot != _sourceSlot)
         {
-            // Swap items
             InventoryManager.Instance.SwapItems(_sourceSlot.Index, targetSlot.Index);
+        }
+        
+        // Drop Items Logic
+        if (targetSlot == null)
+        {
+            // Converts mouse coordinates into 2D world coordinates
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(_currentMousePosition);
+            mouseWorldPosition.z = 0;
+            InventoryManager.Instance.DropItems(_sourceSlot.Index, mouseWorldPosition);
         }
         
         // Clean up
         _ghostIcon.sprite = null;
         _ghostIcon.enabled = false;
         _sourceSlot = null;
+ 
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     private IStorageSlot GetSlotUnderMouse()
     {
         _eventData.position = _currentMousePosition;
@@ -115,11 +125,8 @@ public class DragManager : MonoBehaviour
 
         foreach (var result in _raycastResults)
         {
-            // Instead of GetComponentInParent
-            if (result.gameObject.TryGetComponent(out IStorageSlot slot))
-            {
-                return slot;
-            }
+            IStorageSlot slot = result.gameObject.GetComponentInParent<IStorageSlot>();
+            if (slot != null) return slot;
         }
         return null;
     }
