@@ -22,31 +22,40 @@ public class Slot : MonoBehaviour, IStorageSlot
         SetVisibility(true);
     }
 
-    public void SetVisibility(bool state)
+    public void SetVisibility(bool toggle)
     {
+        UpdateSlotUI(toggle);
+    }
+    
+    private void UpdateSlotUI(bool toggle)
+    {
+        // Check if slot has item
         bool hasItem = itemInstance != null && itemInstance.Data != null;
         
-        // Final condition: Show only if requested AND an item exists
-        bool showElements = state && hasItem;
+        // We only show if the toggle is on AND we have an item.
+        bool showElements = toggle && hasItem;
 
-        // Apply to Icon
-        if (itemIconDisplay != null)
+        // Updates Icon if slot has an item, and shows icon only if toggled
+        if (itemIconDisplay != null) 
         {
             itemIconDisplay.sprite = hasItem ? itemInstance.Data.itemIcon : null;
             itemIconDisplay.enabled = showElements;
         }
 
-        // Apply to Name
-        if (itemNameText != null)
+        // Updates Name if slot has an item, and shows Name only if toggled
+        if (itemNameText != null) 
         {
             itemNameText.text = hasItem ? itemInstance.Data.itemName : "";
             itemNameText.enabled = showElements;
         }
 
-        // Apply to Stack Count
+        // Updates Stack if slot has an item, and shows stack only if toggled
         if (itemStackText != null)
         {
-            bool shouldShowStack = showElements && itemInstance.Data.isStackable && itemInstance.stackSize > 1;
+            bool shouldShowStack = showElements && 
+                                   itemInstance.Data.isStackable && 
+                                   itemInstance.stackSize > 1;
+                             
             itemStackText.text = shouldShowStack ? itemInstance.stackSize.ToString() : "";
             itemStackText.enabled = shouldShowStack;
         }

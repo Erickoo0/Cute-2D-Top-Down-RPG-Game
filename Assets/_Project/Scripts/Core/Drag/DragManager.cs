@@ -14,7 +14,7 @@ public class DragManager : MonoBehaviour
     public static DragManager Instance { get; private set; }
 
     [Header("References")]
-    [SerializeField] private Image ghostIcon; // A single image that follows the player
+    [SerializeField] private Image ghostIcon; 
     [SerializeField] private TMP_Text ghostName;
     [SerializeField] private TMP_Text ghostStack;
         
@@ -69,7 +69,7 @@ public class DragManager : MonoBehaviour
             _ghostIconRect.position = _currentMousePosition;
             
             // Hide item from source slot to "pick it up"
-            _sourceSlot.SetVisibility(false);
+            ToggleGhost(true);
         }
     }
 
@@ -105,7 +105,6 @@ public class DragManager : MonoBehaviour
         
         // Clean up
         ToggleGhost(false);
-        _sourceSlot.SetVisibility(true);
         _sourceSlot = null;
  
     }
