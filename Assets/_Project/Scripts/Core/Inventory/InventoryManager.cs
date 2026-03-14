@@ -8,11 +8,11 @@ using System.Collections.Generic;
 /// </summary>
 public class InventoryManager : MonoBehaviour, ISaveable
 {
-    // Singleton Pattern: Accessible from any script
     public static InventoryManager Instance { get; private set; }
-
-    // Observer Pattern: This event signals a slot has changed and displays the slot index number
+    
     public event Action<int> OnSlotUpdated;
+    public event Action<ItemInstance> OnItemAddedToInventory;
+    
     
     [Header("Item Database")] 
     public ItemDatabase itemDatabase; // Drag our database here
@@ -28,10 +28,10 @@ public class InventoryManager : MonoBehaviour, ISaveable
         // Singleton Pattern: Safety measure to prevent new additional InventoryManagers from being created
         if (Instance != null && Instance != this)
         {
+            Debug.unityLogger.Log("Multiple InventoryManagers detected. Disabling script.");
             Destroy(gameObject);
             return;
         }
-
         Instance = this; // Assign This ID to variable
         
         if (itemDatabase != null) itemDatabase.Initialize();
@@ -44,6 +44,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
         itemsList = new ItemInstance[inventorySize];
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     public bool AddItems(ItemInstance item)
     {
         // Try to stack first if the item is stackable
@@ -54,12 +55,27 @@ public class InventoryManager : MonoBehaviour, ISaveable
                 // Skip empty slots and slots with different items
                 if (itemsList[i] == null || itemsList[i].Data != item.Data) continue;
                 
-                // Skip full slots
-                if (itemsList[i].stackSize >= itemsList[i].Data.maxStackSize) continue;
+                int spaceLeft = itemsList[i].Data.maxStackSize - itemsList[i].stackSize;
                 
-                itemsList[i].stackSize += item.stackSize;
-                OnSlotUpdated?.Invoke(i);
-                return true;
+                // Skip full slots
+                if (spaceLeft <= 0) continue;
+
+                // If whole new stack fits in current slot
+                if (item.stackSize <= spaceLeft)
+                {
+                    itemsList[i].stackSize += item.stackSize;
+                    OnSlotUpdated?.Invoke(i);
+                    OnItemAddedToInventory?.Invoke(item);
+                    return true;
+                }
+                // If partial new stack fits in current slow
+                else
+                {
+                    itemsList[i].stackSize = itemsList[i].Data.maxStackSize;
+                    item.stackSize -= spaceLeft;
+                    OnSlotUpdated?.Invoke(i);
+                    // Do not return true yet, code continues to find open slot for remainder
+                }
             }
         }
         
@@ -70,10 +86,12 @@ public class InventoryManager : MonoBehaviour, ISaveable
             {
                 itemsList[i] = item; // Adds the item
                 OnSlotUpdated?.Invoke(i);
+                OnItemAddedToInventory?.Invoke(item);
                 return true;
             }
         }
 
+        Debug.unityLogger.Log("Iventory is full");
         return false; // If inventory is full
     }
     

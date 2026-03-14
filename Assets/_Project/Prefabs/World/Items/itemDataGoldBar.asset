@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65672ba15d819354c888bad3e0e18fe6, type: 3}
-  m_Name: itemDataGoldBar
+  m_Name: ItemDataGoldBar
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemID: gold_bar
   itemIcon: {fileID: 3940290342797489432, guid: 2b08a08e1bb61c2448181cfedb95fae8, type: 3}

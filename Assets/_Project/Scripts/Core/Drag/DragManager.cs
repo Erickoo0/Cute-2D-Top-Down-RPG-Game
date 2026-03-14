@@ -13,7 +13,7 @@ public class DragManager : MonoBehaviour
 {
     public static DragManager Instance { get; private set; }
 
-    [Header("References")]
+    [Header("References")] 
     [SerializeField] private Image ghostIcon; 
     [SerializeField] private TMP_Text ghostName;
     [SerializeField] private TMP_Text ghostStack;
@@ -30,10 +30,10 @@ public class DragManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            Debug.unityLogger.Log("Multiple DragManagers detected. Disabling script.");
             Destroy(gameObject);
             return;
         }
-        
         Instance = this;
         
         _eventData = new PointerEventData(EventSystem.current);
@@ -65,7 +65,6 @@ public class DragManager : MonoBehaviour
             ghostIcon.sprite = _sourceSlot.Item.Data.itemIcon;
             ghostName.text = _sourceSlot.Item.Data.itemName;
             ghostStack.text = _sourceSlot.Item.stackSize.ToString();
-            ToggleGhost(true);
             _ghostIconRect.position = _currentMousePosition;
             
             // Hide item from source slot to "pick it up"
