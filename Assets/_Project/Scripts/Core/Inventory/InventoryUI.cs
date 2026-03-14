@@ -3,12 +3,20 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Manages the visual representation of the player's inventory. 
-/// Spawns <see cref="SlotUI"/> elements and listens for data changes to refresh specific slots.
+/// Spawns <see cref="InventorySlotUI"/> elements and listens for data changes to refresh specific slots.
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    public GameObject slotPrefab; // The Slots to spawn
-    public Transform slotParent; // The Grid Layout Group
+    
+    [SerializeField] private GameObject slotPrefab; // The Slots to spawn
+    [SerializeField] private Transform inventoryParent;
+    [SerializeField] private Transform hotbarParent;
+    [SerializeField] private int hotbarSize;
+
+    [Header("Selection Frame Settings")] 
+    [SerializeField] private RectTransform selectionFrame;
+    [SerializeField] private float lerpSpeed = 15f;
+    private Vector3 _targetPosition;
     
     // Keep a list of Slot scripts we created
     private readonly List<IStorageSlot> _slots = new List<IStorageSlot>();
@@ -36,13 +44,23 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        // Moves selection frame to target position
+        selectionFrame.position = Vector3.Lerp(selectionFrame.position, _targetPosition, Time.deltaTime * lerpSpeed);
+    }
+    
     private void SetupUI()
     {
-        
         for (int i = 0; i < InventoryManager.Instance.itemsList.Length; i++)
         {
-            GameObject slot = Instantiate(slotPrefab, slotParent); // Creates Slot Prefab
-            if (slot.TryGetComponent(out SlotUI storageSlot))
+            // Determine if this slot should go to hotbar or inventory
+            Transform targetParent = (i < hotbarSize) ? hotbarParent : inventoryParent;
+            
+            // Instantiate the slots
+            GameObject slot = Instantiate(slotPrefab, targetParent);
+            
+            if (slot.TryGetComponent(out InventorySlotUI storageSlot))
             {
                 storageSlot.slotScriptIndex = i;
                 _slots.Add(storageSlot);
@@ -55,6 +73,17 @@ public class InventoryUI : MonoBehaviour
         if (index >= 0 && index < _slots.Count)
         {
             _slots[index].RefreshUI();
+        }
+    }
+
+    public void MoveSelectionFrame(int index)
+    {
+        if (index < 0 || index >= _slots.Count) return;
+        
+        // Checks if _slots[Index] is an InventorySlotUI, if true, assigns it to slotBase
+        if (_slots[index] is InventorySlotUI slotBase)
+        {
+            _targetPosition = slotBase.transform.position;
         }
     }
 }

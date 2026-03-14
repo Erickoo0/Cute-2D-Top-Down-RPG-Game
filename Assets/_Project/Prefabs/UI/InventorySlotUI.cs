@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SlotUI : MonoBehaviour, IStorageSlot
+public class InventorySlotUI : MonoBehaviour, IStorageSlot
 {
     public int slotScriptIndex;
     public int Index => slotScriptIndex;

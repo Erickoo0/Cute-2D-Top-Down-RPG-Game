@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e8e661730dda51047a0b4fb3c2c68218
+guid: c474860b3412a01459f23a43c9769737
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5256508804588260846
-    second: DialogueBoxSimple_0
+      213: 1223781550393851894
+    second: FacesetBox - Copy_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DialogueBoxSimple_0
+      name: FacesetBox - Copy_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 316
-        height: 60
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 5, y: 6, z: 7, w: 6}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 212bdc7a7112d07b0800000000000000
-      internalID: -5256508804588260846
+      spriteID: 6fff6e116debbf010800000000000000
+      internalID: 1223781550393851894
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0f9554f8dd736484a81c22f06eaaf8be
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      DialogueBoxSimple_0: -5256508804588260846
+      FacesetBox - Copy_0: 1223781550393851894
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
