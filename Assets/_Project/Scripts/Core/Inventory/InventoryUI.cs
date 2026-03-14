@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Manages the visual representation of the player's inventory. 
-/// Spawns <see cref="Slot"/> elements and listens for data changes to refresh specific slots.
+/// Spawns <see cref="SlotUI"/> elements and listens for data changes to refresh specific slots.
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class InventoryUI : MonoBehaviour
     public Transform slotParent; // The Grid Layout Group
     
     // Keep a list of Slot scripts we created
-    private readonly List<Slot> _slotScriptsList = new List<Slot>();
+    private readonly List<IStorageSlot> _slots = new List<IStorageSlot>();
 
     private void Start()
     {
@@ -42,20 +42,19 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < InventoryManager.Instance.itemsList.Length; i++)
         {
             GameObject slot = Instantiate(slotPrefab, slotParent); // Creates Slot Prefab
-            Slot slotScript = slot.GetComponent<Slot>(); // Find the Slot Prefabs Slot Script
-
-            slotScript.slotScriptIndex = i; // Assign each slot an index number from the for loop
-            _slotScriptsList.Add(slotScript); // Add the slotscript to a list
+            if (slot.TryGetComponent(out SlotUI storageSlot))
+            {
+                storageSlot.slotScriptIndex = i;
+                _slots.Add(storageSlot);
+            }
         }
     }
 
     private void RefreshSlotUI(int index)
     {
-        // Get items from item list in InventoryManager.cs
-        ItemInstance newData = InventoryManager.Instance.itemsList[index];
-        
-        // Tells the slot script to update its data
-        _slotScriptsList[index].UpdateSlot(newData);
+        if (index >= 0 && index < _slots.Count)
+        {
+            _slots[index].RefreshUI();
+        }
     }
-    
 }

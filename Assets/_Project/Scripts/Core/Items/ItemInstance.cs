@@ -1,5 +1,5 @@
 /// <summary>
-/// A unique, modifiable instance of an item 
+/// The Identity: Dynamic item data, unique to each instance
 /// </summary>
 [System.Serializable]
 public class ItemInstance

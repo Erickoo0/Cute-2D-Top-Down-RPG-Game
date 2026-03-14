@@ -2,62 +2,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Slot : MonoBehaviour, IStorageSlot
+public class SlotUI : MonoBehaviour, IStorageSlot
 {
     public int slotScriptIndex;
-    public ItemInstance itemInstance;
-    
-    public ItemInstance Item => itemInstance;
     public int Index => slotScriptIndex;
+    public ItemInstance Item => InventoryManager.Instance.itemsList[slotScriptIndex];
 
     [Header("UI References")]
     [SerializeField] private Image itemIconDisplay;
     [SerializeField] private TextMeshProUGUI itemNameText;
     [SerializeField] private TextMeshProUGUI itemStackText;
 
-    public void UpdateSlot(ItemInstance newItem)
-    {
-        itemInstance = newItem;
-        // Refresh the UI state immediately when data changes
-        SetVisibility(true);
-    }
+    private bool _isBeingDragged = false;
 
-    public void SetVisibility(bool toggle)
+    public void RefreshUI()
     {
-        UpdateSlotUI(toggle);
-    }
-    
-    private void UpdateSlotUI(bool toggle)
-    {
-        // Check if slot has item
-        bool hasItem = itemInstance != null && itemInstance.Data != null;
+        var item = Item; // Gets data from Inventory Manager via Property
+        bool hasItem = item != null && item.Data != null; // Check if the slot has an item
         
-        // We only show if the toggle is on AND we have an item.
-        bool showElements = toggle && hasItem;
+        bool shouldShow = hasItem && !_isBeingDragged; // Hides elements while being dragged
 
-        // Updates Icon if slot has an item, and shows icon only if toggled
-        if (itemIconDisplay != null) 
-        {
-            itemIconDisplay.sprite = hasItem ? itemInstance.Data.itemIcon : null;
-            itemIconDisplay.enabled = showElements;
-        }
+        itemIconDisplay.sprite = hasItem ? item.Data.itemIcon : null;
+        itemIconDisplay.enabled = shouldShow;
+        
+        itemNameText.text = hasItem ? item.Data.itemName : null;
+        itemNameText.enabled = shouldShow;
 
-        // Updates Name if slot has an item, and shows Name only if toggled
-        if (itemNameText != null) 
-        {
-            itemNameText.text = hasItem ? itemInstance.Data.itemName : "";
-            itemNameText.enabled = showElements;
-        }
+        itemStackText.text = hasItem ? item.stackSize.ToString() : null;
+        itemStackText.enabled = shouldShow;
+    }
 
-        // Updates Stack if slot has an item, and shows stack only if toggled
-        if (itemStackText != null)
-        {
-            bool shouldShowStack = showElements && 
-                                   itemInstance.Data.isStackable && 
-                                   itemInstance.stackSize > 1;
-                             
-            itemStackText.text = shouldShowStack ? itemInstance.stackSize.ToString() : "";
-            itemStackText.enabled = shouldShowStack;
-        }
+    public void SetDraggingState(bool isDragging)
+    {
+        _isBeingDragged = isDragging;
+        RefreshUI();
     }
 }

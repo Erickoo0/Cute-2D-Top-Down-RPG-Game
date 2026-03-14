@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using Image = UnityEngine.UI.Image;
 using TMPro;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// A centralized manager that handles drag-and-drop logic for any <see cref="IStorageSlot"/>.
@@ -117,7 +116,7 @@ public class DragManager : MonoBehaviour
 
         if (_sourceSlot != null)
         { 
-            _sourceSlot.SetVisibility(!toggle);
+            _sourceSlot.SetDraggingState(toggle); // Tell the slot to hide its UI
         }
     }
     

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// The Blueprint: Static Item Data
+/// </summary>
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class ItemData : ScriptableObject
 {

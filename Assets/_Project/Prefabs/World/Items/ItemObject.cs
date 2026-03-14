@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// The Physical: The 2D model and Object of an Item in the game world
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D))]
 public class ItemObject : MonoBehaviour
 {

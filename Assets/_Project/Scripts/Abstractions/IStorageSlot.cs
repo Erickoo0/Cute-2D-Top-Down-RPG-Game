@@ -2,8 +2,8 @@ using UnityEngine;
 
 public interface IStorageSlot
 {
-    ItemInstance Item { get; }
+    ItemInstance Item { get; } // Pulls data from Inventory Manager
     int Index { get; }
-    void UpdateSlot(ItemInstance newItem);
-    void SetVisibility(bool toggle);
+    void RefreshUI(); 
+    void SetDraggingState(bool isDragging);
 }

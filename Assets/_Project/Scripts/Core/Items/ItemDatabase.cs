@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// The Map: Connects ItemData.itemID to the ItemData in a Dictionary
+/// </summary>
 [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/Database")]
 public class ItemDatabase : ScriptableObject
 {
