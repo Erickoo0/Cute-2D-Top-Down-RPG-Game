@@ -24,9 +24,10 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         SetupUI();
-        
-        // Subscribe to InventoryManager.cs event
+
+        // Subscribe to events
         InventoryManager.Instance.OnSlotUpdated += RefreshSlotUI;
+        InventoryManager.Instance.OnActiveSlotIndexChanged += MoveSelectionFrame;
         
         // Initial Refresh: Sync UI with whatever data is already in the Inventory Manager (Saved data)
         for (int i = 0; i < InventoryManager.Instance.itemsList.Length; i++)
@@ -37,10 +38,11 @@ public class InventoryUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Ubsubscribe when destroyed to prevent memory leaks
+        // Unsubscribe when destroyed to prevent memory leaks
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.OnSlotUpdated -= RefreshSlotUI;
+            InventoryManager.Instance.OnActiveSlotIndexChanged -= MoveSelectionFrame;
         }
     }
 
@@ -78,8 +80,6 @@ public class InventoryUI : MonoBehaviour
 
     public void MoveSelectionFrame(int index)
     {
-        if (index < 0 || index >= _slots.Count) return;
-        
         // Checks if _slots[Index] is an InventorySlotUI, if true, assigns it to slotBase
         if (_slots[index] is InventorySlotUI slotBase)
         {

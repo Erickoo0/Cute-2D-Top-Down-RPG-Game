@@ -12,7 +12,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
     
     public event Action<int> OnSlotUpdated;
     public event Action<ItemInstance> OnItemAddedToInventory;
-    
+    public event Action<int> OnActiveSlotIndexChanged;
     
     [Header("Item Database")] 
     public ItemDatabase itemDatabase; // Drag our database here
@@ -179,6 +179,13 @@ public class InventoryManager : MonoBehaviour, ISaveable
         {
             OnSlotUpdated?.Invoke(i);
         }
+    }
+
+    public void ChangeActiveSlot(int index)
+    {
+        ItemInstance selectedItem = itemsList[index];
+        
+        OnActiveSlotIndexChanged?.Invoke(index);
     }
 
 }

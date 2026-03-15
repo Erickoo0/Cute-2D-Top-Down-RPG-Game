@@ -19,4 +19,5 @@ public class ItemData : ScriptableObject
     [Header("Item Properties")] 
     public bool isStackable;
     public int maxStackSize = 60;
+    public bool isUsable;
 }
