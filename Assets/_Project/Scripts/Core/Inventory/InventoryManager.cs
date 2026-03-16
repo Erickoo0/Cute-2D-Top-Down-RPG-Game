@@ -101,7 +101,6 @@ public class InventoryManager : MonoBehaviour, ISaveable
         ItemInstance item = itemsList[index];
         item.stackSize--;
         if (item.stackSize <= 0) itemsList[index] = null;
-
         
         OnSlotUpdated?.Invoke(index);
     }

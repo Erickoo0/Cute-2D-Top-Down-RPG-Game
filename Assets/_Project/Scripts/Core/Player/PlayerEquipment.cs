@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    [Header("Equipment Settings")]
+    [Tooltip("The transform where the instantiated item will be parented")]
+    [SerializeField] private Transform _parentTransform;
+    
     private GameObject _currentActiveItem;
     private int _currentActiveSlotIndex = -1;
     
@@ -28,7 +32,7 @@ public class PlayerEquipment : MonoBehaviour
             HotbarManager.Instance.OnUseItemInput -= TryUseActiveItem;
         }
     }
-
+    
     private void SetActiveSlotIndex(int index)
     {
         _currentActiveSlotIndex = index;
@@ -57,7 +61,7 @@ public class PlayerEquipment : MonoBehaviour
         if (itemInSlot == null || itemInSlot.Data == null || itemInSlot.Data.itemObject == null) return;
         
         // Spawn the Item Object
-        _currentActiveItem = Instantiate(itemInSlot.Data.itemObject, transform);
+        _currentActiveItem = Instantiate(itemInSlot.Data.itemObject, _parentTransform);
         
         // Reset position
         _currentActiveItem.transform.localPosition = Vector3.zero;

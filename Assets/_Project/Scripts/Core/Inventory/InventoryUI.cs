@@ -34,6 +34,8 @@ public class InventoryUI : MonoBehaviour
         {
             RefreshSlotUI(i);
         }
+
+        selectionFrame.gameObject.SetActive(true);
     }
 
     private void OnDestroy()
