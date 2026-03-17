@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// The Blueprint: Static Item Data
 /// </summary>
-[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Item/Item")]
 public class ItemData : ScriptableObject
 {
     [Header("Item ID")] 
@@ -19,5 +20,11 @@ public class ItemData : ScriptableObject
     [Header("Item Properties")] 
     public bool isStackable;
     public int maxStackSize = 60;
+    
     public bool isUsable;
+
+    public virtual bool Use(GameObject user, ItemInstance itemInstance)
+    {
+        return false;
+    }
 }
