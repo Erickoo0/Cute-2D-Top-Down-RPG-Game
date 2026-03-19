@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The Map: Connects ItemData.itemID to the ItemData in a Dictionary
 /// </summary>
-[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/Database")]
+[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Item/Database")]
 public class ItemDatabase : ScriptableObject
 {
     [Tooltip("Add every ItemData in the game here")]
@@ -26,6 +26,11 @@ public class ItemDatabase : ScriptableObject
         // Loop through every item in the database
         foreach (ItemData itemData in allItems)
         {
+            if (itemData == null)
+            {
+                Debug.LogWarning("[ItemDatabase] ItemData is null!");
+                continue;
+            }
             // Pairs itemID to itemData, returns warning if itemID has already been previously used
             if (!_itemDictionary.TryAdd(itemData.itemID, itemData))
             {
