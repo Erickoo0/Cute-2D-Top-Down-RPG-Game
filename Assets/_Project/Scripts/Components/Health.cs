@@ -5,11 +5,11 @@ public class Health : MonoBehaviour
 {
     [Header("HP Settings")]
     public float hpMax = 100f;
-    private float _hpCurrent;
+    [SerializeField] private float hpCurrent;
     
     // Heal Overtime Variables
     private float _hpHealTimer;
-    private float _hpHealTimerMax = 0.15f;
+    private float _hpHealTimerMax = 0.5f;
     private float _hpHealed;
     private float _hpHealedMax;
     private float _hpHealedPerTick;
@@ -22,22 +22,26 @@ public class Health : MonoBehaviour
     // Health Property
     public float HpCurrent
     {
-        get => _hpCurrent;
+        get => hpCurrent;
         set
         {
-            float hpPrevious = _hpCurrent;
+            float hpPrevious = hpCurrent;
 
             // Clamp health so it never goes below 0 or above max.
-            _hpCurrent = Mathf.Clamp(value, 0, hpMax);
+            hpCurrent = Mathf.Clamp(value, 0, hpMax);
 
             // Only notify listeners if health actually changed.
-            if (_hpCurrent != hpPrevious)
+            if (!Mathf.Approximately(hpCurrent, hpPrevious))
             {
-                OnHpUpdated?.Invoke(_hpCurrent);
+                float difference = hpCurrent - hpPrevious;
+                int differenceRounded = Mathf.RoundToInt(difference);
+                CombatEvents.RequestFloatingText(differenceRounded, transform.position);
+                
+                OnHpUpdated?.Invoke(hpCurrent);
             }
 
             // If health hit zero, notify death listeners.
-            if (_hpCurrent <= 0)
+            if (hpCurrent <= 0)
             {
                 OnDeath?.Invoke();
             }
@@ -45,8 +49,6 @@ public class Health : MonoBehaviour
     }
     
     public bool HpIsHealingOverTime => _hpHealed < _hpHealedMax;
-    
-    private void Awake() => _hpCurrent = 10;
     
     private void Update()
     {

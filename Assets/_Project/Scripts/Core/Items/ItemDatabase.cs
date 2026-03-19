@@ -26,6 +26,11 @@ public class ItemDatabase : ScriptableObject
         // Loop through every item in the database
         foreach (ItemData itemData in allItems)
         {
+            if (itemData == null)
+            {
+                Debug.LogWarning("[ItemDatabase] ItemData is null!");
+                continue;
+            }
             // Pairs itemID to itemData, returns warning if itemID has already been previously used
             if (!_itemDictionary.TryAdd(itemData.itemID, itemData))
             {
