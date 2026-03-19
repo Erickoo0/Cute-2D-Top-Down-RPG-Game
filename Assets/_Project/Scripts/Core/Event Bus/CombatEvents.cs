@@ -1,13 +1,13 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 public static class CombatEvents
 {
-    public static event Action<int, Vector3> OnFloatingNumberSpawnRequested;
-    
-    // Called from requesters to spawn a floating number
-    public static void RequestingFloatingNumberSpawn(int amount, Vector3 position)
+    // Signals when a floating text gets requested
+    public static event Action<int, Vector3> OnFloatingTextRequested;
+    // Any script can call this method to request a floating number
+    public static void RequestFloatingText(int amount, Vector3 position)
     {
-        OnFloatingNumberSpawnRequested?.Invoke(amount, position);
+        OnFloatingTextRequested?.Invoke(amount, position);
     }
 }

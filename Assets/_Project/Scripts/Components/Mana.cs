@@ -5,7 +5,7 @@ public class Mana : MonoBehaviour
 {
     [Header("MP Settings")]
     public float mpMax = 100f;
-    private float _mpCurrent;
+    [SerializeField] private float mpCurrent;
     
     // Heal Overtime Variables
     private float _mpHealTimer;
@@ -20,24 +20,25 @@ public class Mana : MonoBehaviour
     // Health Property
     public float MpCurrent
     {
-        get => _mpCurrent;
+        get => mpCurrent;
         set
         {
-            float mpPrevious = _mpCurrent;
+            float mpPrevious = mpCurrent;
 
             // Clamp health so it never goes below 0 or above max.
-            _mpCurrent = Mathf.Clamp(value, 0, mpMax);
+            mpCurrent = Mathf.Clamp(value, 0, mpMax);
 
             // Only notify listeners if health actually changed.
-            if (_mpCurrent != mpPrevious)
+            if (mpCurrent != mpPrevious)
             {
-                OnMpUpdated?.Invoke(_mpCurrent);
+                float difference = mpCurrent - mpPrevious;
+                int differenceRounded = Mathf.RoundToInt(difference);
+                CombatEvents.RequestFloatingText(differenceRounded, transform.position);
+                OnMpUpdated?.Invoke(mpCurrent);
             }
         }
     }
     public bool MpIsHealingOverTime => _mpHealed < _mpHealedMax;
-    
-    private void Awake() => _mpCurrent = 10;
     
     private void Update()
     {
