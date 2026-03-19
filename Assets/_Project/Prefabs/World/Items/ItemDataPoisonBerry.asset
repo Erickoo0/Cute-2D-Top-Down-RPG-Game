@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fb634dd7941d1640ab67538c39a7894, type: 3}
-  m_Name: itemDataBeef
+  m_Name: ItemDataPoisonBerry
   m_EditorClassIdentifier: Assembly-CSharp::ItemDataConsumable
-  itemID: Beef
-  itemIcon: {fileID: 1917982649346762048, guid: 748a419f398cfd14cbd7511826f4634e, type: 3}
-  itemName: Beef
-  itemDescription: Beeeeeef
+  itemID: PoisonBerry
+  itemIcon: {fileID: -4787621849507200261, guid: a5809f7487b03e34dae4aae7b34a8742, type: 3}
+  itemName: Poison Berry
+  itemDescription: A poison berry
   itemObject: {fileID: 3666771714786422289, guid: 763ed809e310f934ab2388063799c3e8, type: 3}
   isStackable: 1
   maxStackSize: 60
   isUsable: 1
-  hpHealAmount: 20
-  hpHealDuration: 2
-  mpHealAmount: 30
-  mpHealDuration: 4
+  hpHealAmount: -20
+  hpHealDuration: 0
+  mpHealAmount: -15
+  mpHealDuration: 0

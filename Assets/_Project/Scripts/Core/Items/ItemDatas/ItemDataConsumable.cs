@@ -22,11 +22,11 @@ public class ItemDataConsumable : ItemData
     
     private bool HpHealCheck(GameObject user)
     {
-        if (hpHealAmount <= 0) return false;
-        
         Health health = user.GetComponent<Health>();
         if (health == null) return false;
-        if (health.HpCurrent >= health.hpMax)
+        if (hpHealAmount == 0) return false;
+        
+        if (health.HpCurrent >= health.hpMax && hpHealAmount > 0)
         {
             Debug.Log("MP is full, item not used!");
             return false;
@@ -36,7 +36,7 @@ public class ItemDataConsumable : ItemData
         if (hpHealDuration > 0)
         {
             // Exit if heal over time already exists
-            if (health.HpIsHealingOverTime)
+            if (health.HpIsHealingOverTime && hpHealAmount > 0)
             {
                  Debug.Log("HP is already healing! Wait for it to finish.");
                 return false;
@@ -54,11 +54,11 @@ public class ItemDataConsumable : ItemData
     
     private bool MpHealCheck(GameObject user)
     {
-        if (mpHealAmount <= 0) return false;
-        
         Mana mana = user.GetComponent<Mana>();
         if (mana == null) return false;
-        if (mana.MpCurrent >= mana.mpMax)
+        if (mpHealAmount == 0) return false;
+
+        if (mana.MpCurrent >= mana.mpMax && mpHealAmount > 0)
         {
             Debug.Log("MP is full, item not used!");
             return false;
@@ -68,7 +68,7 @@ public class ItemDataConsumable : ItemData
         if (mpHealDuration > 0)
         {
             // Exit if heal over time already exists
-            if (mana.MpIsHealingOverTime) // Assuming the Mana script mirrors this property
+            if (mana.MpIsHealingOverTime && mpHealAmount > 0) // Assuming the Mana script mirrors this property
             {
                 Debug.Log("MP is already restoring! Wait for it to finish.");
                 return false;
