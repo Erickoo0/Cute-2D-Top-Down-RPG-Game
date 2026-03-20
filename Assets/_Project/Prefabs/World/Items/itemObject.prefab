@@ -180,3 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemObject
   startingItemData: {fileID: 0}
+  bounceDuration: 0.25
+  bounceHeight: 0.5
+  bounceCount: 2
