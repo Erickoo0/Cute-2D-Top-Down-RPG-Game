@@ -7,8 +7,12 @@ public class InventoryTest : MonoBehaviour
     [Tooltip("Bind the key or button you want to use to spawn items.")]
     public InputAction addItemHotkey;
 
+    private GameObject _player;
+
     private void OnEnable() => addItemHotkey.Enable();
     private void OnDisable() => addItemHotkey.Disable();
+    
+    private void Start() => _player = GameObject.FindGameObjectWithTag("Player");
     
     void Update()
     {
@@ -28,6 +32,8 @@ public class InventoryTest : MonoBehaviour
         ItemInstance newItemInstance = new ItemInstance(randomItemData, randomAmount);
         
         // Add to inventory
+        //GameObject droppedItemObj = Instantiate(newItemInstance.Data.itemObject, _player.transform , Quaternion.identity);
+
         bool itemAdded = InventoryManager.Instance.AddItems(newItemInstance);
         
         if (itemAdded) 

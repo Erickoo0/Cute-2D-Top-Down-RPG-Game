@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
 
@@ -13,10 +14,15 @@ public class ItemObject : MonoBehaviour
     [SerializeField] private int bounceCount = 3;
     [SerializeField] private float flyDuration = 0.4f;
     [SerializeField] private float jumpPower = 1.2f;
+
+    [Header("Pickup Animation")]
+    [SerializeField] private float pullSpeed = 0.2f;
+    [SerializeField] private Ease pullEase = Ease.InBack; // Snappy vaccuum feel
     
     private ItemInstance _itemInstance;
     private SpriteRenderer _spriteRenderer;
     private bool _canBePickedUp = false;
+    private Sequence _activeSequence; // Spawn Animation sequence
 
     private void Awake()
     {
@@ -53,7 +59,7 @@ public class ItemObject : MonoBehaviour
         _canBePickedUp = false;
         
         // Create a sequence jump -> bounce
-        Sequence spawnSequence = DOTween.Sequence();
+        _activeSequence = DOTween.Sequence();
         
         // Final position is either the provided target, or its current position if spawned directly
         Vector3 finalPosition = dropTarget ?? transform.position;
@@ -62,10 +68,13 @@ public class ItemObject : MonoBehaviour
         if (dropTarget.HasValue)
         {
             // Adds DOJump animation to the spawnSequence
-            spawnSequence.Append(transform.DOJump(finalPosition, jumpPower, 1, flyDuration).SetEase(Ease.Linear));
+            _activeSequence.Append(transform.DOJump(finalPosition, jumpPower, 1, flyDuration).SetEase(Ease.Linear));
+            
+            // 2. Enable Pickup AFTER fly animation
+            _activeSequence.AppendCallback(() => _canBePickedUp = true);
         }
         
-        // 2. Bounce Logic
+        // 3. Bounce Logic
         for (int i = 0; i < bounceCount; i++)
         {
             // Decrease the height and duration each bounce
@@ -73,26 +82,34 @@ public class ItemObject : MonoBehaviour
             float currentDuration = bounceDuration * (1f - (i * 0.2f));
         
             // Adds DOMoveY (Up) to the spawnSequence
-            spawnSequence.Append(transform.DOMoveY(finalPosition.y + currentBounceHeight, currentDuration / 2)
+            _activeSequence.Append(transform.DOMoveY(finalPosition.y + currentBounceHeight, currentDuration / 2)
                 .SetEase(Ease.OutQuad));
             // Adds DOMoveY (Down) to the spawnSequence
-            spawnSequence.Append(transform.DOMoveY(finalPosition.y, currentDuration / 2)
+            _activeSequence.Append(transform.DOMoveY(finalPosition.y, currentDuration / 2)
                 .SetEase(Ease.InQuad));
         }
-        // 3. Enable Pickup logic ONLY after the entire sequence finishes
-        spawnSequence.OnComplete(() => _canBePickedUp = true);
+        
+        // 4. Clean up the sequence reference
+        _activeSequence.OnComplete(() => _activeSequence = null);
     }
 
-    private void TryPickup(Collider2D collision)
+    private async Task TryPickup(Collider2D collision)
     {
         if (collision.CompareTag("Player") && _itemInstance != null)
         {
+            // 1. Lock out further triggers
             _canBePickedUp = false; // Set to false since item is now picked up
-            // Tell InventoryManager to add item to inventory
+
+            // 2. Kill the current animation sequence 
+            _activeSequence.Kill();
+
+            // 3. Play the vacuum animation towards the player, pause the code here untill animation finishes.
+            await transform.DOMove(collision.transform.position, pullSpeed).SetEase(pullEase).AsyncWaitForCompletion();
+            
+            // 4. Execute pickup
             bool wasPickedUp = InventoryManager.Instance.AddItems(_itemInstance);
             if (wasPickedUp)
             {
-                // Add other effects here like sound later
                 Destroy(gameObject);
             }
         }
