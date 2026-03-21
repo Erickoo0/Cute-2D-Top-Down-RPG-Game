@@ -70,7 +70,7 @@ public class PlayerEquipment : MonoBehaviour
         // Initialize the active items sprite and data
         if (_currentActiveItem.TryGetComponent(out ItemObject itemObjectScript))
         {
-            itemObjectScript.InitializeItem(itemInSlot, null, false);
+            itemObjectScript.SetItemObject(itemInSlot, null, false);
         }
     }
 

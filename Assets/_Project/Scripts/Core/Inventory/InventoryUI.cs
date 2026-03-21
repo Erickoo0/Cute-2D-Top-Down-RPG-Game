@@ -76,7 +76,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (index >= 0 && index < _slots.Count)
         {
-            _slots[index].RefreshUI();
+            _slots[index].RefreshSlotUI();
         }
     }
 

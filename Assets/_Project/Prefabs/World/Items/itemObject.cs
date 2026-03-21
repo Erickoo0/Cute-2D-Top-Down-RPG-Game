@@ -17,7 +17,7 @@ public class ItemObject : MonoBehaviour
 
     [Header("Pickup Animation")]
     [SerializeField] private float pullSpeed = 0.2f;
-    [SerializeField] private Ease pullEase = Ease.InBack; // Snappy vaccuum feel
+    [SerializeField] private Ease pullEase = Ease.InBack; // Snappy vacuum feel
     
     private ItemInstance _itemInstance;
     private SpriteRenderer _spriteRenderer;
@@ -29,18 +29,28 @@ public class ItemObject : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         
         // If we assigned starting item in the inspector, then initialize it
-        if (startingItemData != null) InitializeItem(new ItemInstance(startingItemData));
+        if (startingItemData != null) SetItemObject(new ItemInstance(startingItemData));
         
     }
 
     private void OnDestroy() => _activeSequence?.Kill(); // Kill the animation sequence on destroy
+
+    private void Update()
+    {
+        if (_itemInstance?.Data != null && _itemInstance.Data.animated)
+        {
+            _spriteRenderer.sprite = GlobalHelper.GetAnimatedSprite(_itemInstance.Data);
+        }
+    }
     
-    public void InitializeItem(ItemInstance newItemInstance, Vector3? dropTarget = null, bool animate = true)
+    public void SetItemObject(ItemInstance newItemInstance, Vector3? dropTarget = null, bool animate = true)
     {
         _itemInstance = newItemInstance;
-        _spriteRenderer.sprite = _itemInstance.Data.itemIcon;
         gameObject.name = _itemInstance.Data.itemName;
 
+        // Set initial sprite
+        _spriteRenderer.sprite = _itemInstance.Data.animated ? GlobalHelper.GetAnimatedSprite(_itemInstance.Data) : _itemInstance.Data.itemIconAnimated[0];
+        
         if (!animate) return; // Skip the animation
         PlaySpawnAnimation(dropTarget);
     }

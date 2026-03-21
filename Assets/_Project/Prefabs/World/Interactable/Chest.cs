@@ -77,7 +77,7 @@ public class Chest : MonoBehaviour, IInteractable
             if (droppedItemObj.TryGetComponent(out ItemObject itemObject))
             {
                 ItemInstance itemInstance = new ItemInstance(itemDrop.itemData, itemDrop.dropAmount); // Create an item instance
-                itemObject.InitializeItem(itemInstance, targetPos);
+                itemObject.SetItemObject(itemInstance, targetPos);
             }
             
             // 4. Inccrement the angle for the next item

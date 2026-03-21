@@ -128,7 +128,7 @@ public class InventoryManager : MonoBehaviour, ISaveable
         // If droppedItem has compoent ItemObject, then attach it to the variable itemObject, else pass
         if (droppedItem.TryGetComponent(out ItemObject itemObject))
         {
-            itemObject.InitializeItem(itemsList[index]);
+            itemObject.SetItemObject(itemsList[index]);
         }
         
         // Clear the slot and notify the UI

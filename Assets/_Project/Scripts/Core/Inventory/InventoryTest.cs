@@ -32,7 +32,7 @@ public class InventoryTest : MonoBehaviour
         GameObject droppedItemObj = Instantiate(newItemInstance.Data.itemObject, _player.transform.position, Quaternion.identity);
         if (droppedItemObj.TryGetComponent(out ItemObject itemObject))
         {
-            itemObject.InitializeItem(newItemInstance);
+            itemObject.SetItemObject(newItemInstance);
             Debug.unityLogger.Log($"Spawned {randomAmount}x {randomItemData.itemName} in the world!");
         }
 

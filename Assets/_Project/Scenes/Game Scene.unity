@@ -16921,6 +16921,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed7d290f5553204fa2399d6d4a12eeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnableUI
+  excludedChildren:
+  - {fileID: 12255232}
 --- !u!1 &1522273576
 GameObject:
   m_ObjectHideFlags: 0
@@ -18268,8 +18270,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 478019865}
   - {fileID: 976108714}
+  - {fileID: 478019865}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1894244088
@@ -18500,7 +18502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1453edbed7a90d94ba048cdc92aa6d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipment
-  parentTransform: {fileID: 0}
+  parentTransform: {fileID: 478019865}
 --- !u!114 &1894244095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18759,7 +18761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55cf072e0a8e64440b227a88a8dc1754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_itemPopup_Manager
-  itemPopupPrefab: {fileID: 6540912107743298367, guid: 198bc202ba7cef948a694fe76d9c1467, type: 3}
+  itemPopupUI: {fileID: 6540912107743298367, guid: 198bc202ba7cef948a694fe76d9c1467, type: 3}
   popupParent: {fileID: 1522273577}
 --- !u!1 &1951512956
 GameObject:
