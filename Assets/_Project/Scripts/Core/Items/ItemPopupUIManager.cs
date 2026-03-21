@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class UI_itemPopup_Manager : MonoBehaviour
+public class ItemPopupManager : MonoBehaviour
 {
     [Header("Visual References")]
-    public GameObject itemPopupPrefab;
+    public GameObject itemPopupUI;
     public Transform popupParent; // Vertical Layout Group
 
     private void Start()
@@ -13,8 +13,8 @@ public class UI_itemPopup_Manager : MonoBehaviour
 
     private void SpawnPopup(ItemInstance itemInstance)
     {
-        GameObject newPopup = Instantiate(itemPopupPrefab, popupParent);
-        newPopup.GetComponent<ItemPopup>().PopupSetup(itemInstance);
+        GameObject newPopup = Instantiate(itemPopupUI, popupParent);
+        newPopup.GetComponent<ItemPopup>().SetPopUp(itemInstance);
     }
     
     private void OnDestroy()

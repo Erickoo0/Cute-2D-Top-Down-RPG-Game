@@ -58,13 +58,16 @@ public class DragManager : MonoBehaviour
     {
         _sourceSlot = GetSlotUnderMouse();
 
-        if (_sourceSlot != null && _sourceSlot.Item != null)
+        if (_sourceSlot != null && _sourceSlot.itemInstance != null)
         {
-            // Update visuals from source data
-            ghostIcon.sprite = _sourceSlot.Item.Data.itemIcon;
-            ghostName.text = _sourceSlot.Item.Data.itemName;
-            ghostStack.text = _sourceSlot.Item.stackSize.ToString();
+            // Set the text
+            ghostName.text = _sourceSlot.itemInstance.Data.itemName;
+            ghostStack.text = _sourceSlot.itemInstance.stackSize.ToString();
             _ghostIconRect.position = _currentMousePosition;
+            
+            // If not animated, set the sprite
+            if (!_sourceSlot.itemInstance.Data.animated)
+                ghostIcon.sprite = _sourceSlot.itemInstance.Data.itemIconAnimated[0];
             
             // Hide item from source slot to "pick it up"
             ToggleGhost(true);
@@ -73,10 +76,11 @@ public class DragManager : MonoBehaviour
 
     private void WhileDragging()
     {
-        if (ghostIcon.enabled)
-        {
-            _ghostIconRect.position = _currentMousePosition;
-        }
+        if (!ghostIcon.enabled) return;
+        
+        _ghostIconRect.position = _currentMousePosition;
+        if (_sourceSlot.itemInstance.Data.animated) 
+            ghostIcon.sprite = GlobalHelper.GetAnimatedSprite(_sourceSlot.itemInstance.Data);
     }
 
     private void EndDrag()

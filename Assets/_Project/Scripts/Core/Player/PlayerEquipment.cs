@@ -35,6 +35,7 @@ public class PlayerEquipment : MonoBehaviour
     
     private void SetActiveSlotIndex(int index)
     {
+        parentTransform.gameObject.SetActive(true);
         _currentActiveSlotIndex = index;
         // Find the Item Data from slot index
         ItemInstance itemInSlot = InventoryManager.Instance.itemsList[_currentActiveSlotIndex];
@@ -67,16 +68,10 @@ public class PlayerEquipment : MonoBehaviour
         _currentActiveItem.transform.localPosition = Vector3.zero;
         _currentActiveItem.transform.localRotation = Quaternion.identity;
         
-        // 5. Disable Collision (Prevents picking up the item you are holding)
-        if (_currentActiveItem.TryGetComponent(out Collider2D collision))
-        {
-            collision.enabled = false;
-        }
-        
         // Initialize the active items sprite and data
         if (_currentActiveItem.TryGetComponent(out ItemObject itemObjectScript))
         {
-            itemObjectScript.InitializeItem(itemInSlot);
+            itemObjectScript.SetItemObject(itemInSlot, null, false);
         }
     }
 

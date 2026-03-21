@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: ItemDataGoldBar
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemID: gold_bar
-  itemIcon: {fileID: 3940290342797489432, guid: 2b08a08e1bb61c2448181cfedb95fae8, type: 3}
+  itemIconAnimated:
+  - {fileID: 3940290342797489432, guid: 2b08a08e1bb61c2448181cfedb95fae8, type: 3}
   itemName: Gold Bar
   itemDescription: 
   itemObject: {fileID: 3666771714786422289, guid: 763ed809e310f934ab2388063799c3e8, type: 3}
+  animated: 0
   isStackable: 1
   maxStackSize: 60
+  isUsable: 0

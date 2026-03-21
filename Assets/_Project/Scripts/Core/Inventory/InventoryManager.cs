@@ -128,12 +128,19 @@ public class InventoryManager : MonoBehaviour, ISaveable
         // If droppedItem has compoent ItemObject, then attach it to the variable itemObject, else pass
         if (droppedItem.TryGetComponent(out ItemObject itemObject))
         {
-            itemObject.InitializeItem(itemsList[index]);
+            itemObject.SetItemObject(itemsList[index]);
         }
         
         // Clear the slot and notify the UI
         itemsList[index] = null;
         OnSlotUpdated?.Invoke(index);
+    }
+    
+    public void ChangeActiveSlot(int index)
+    {
+        ItemInstance selectedItem = itemsList[index];
+        
+        OnActiveSlotIndexChanged?.Invoke(index);
     }
 
     public void PopulateSaveData(SaveData saveData)
@@ -190,12 +197,4 @@ public class InventoryManager : MonoBehaviour, ISaveable
             OnSlotUpdated?.Invoke(i);
         }
     }
-
-    public void ChangeActiveSlot(int index)
-    {
-        ItemInstance selectedItem = itemsList[index];
-        
-        OnActiveSlotIndexChanged?.Invoke(index);
-    }
-
 }
