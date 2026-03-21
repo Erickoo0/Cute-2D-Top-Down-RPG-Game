@@ -6,7 +6,7 @@ public class InventoryTest : MonoBehaviour
     [Header("Input Settings")]
     [Tooltip("Bind the key or button you want to use to spawn items.")]
     public InputAction addItemHotkey;
-
+    
     private GameObject _player;
 
     private void OnEnable() => addItemHotkey.Enable();
@@ -16,29 +16,25 @@ public class InventoryTest : MonoBehaviour
     
     void Update()
     {
-        // Wait for spacebar
+        // 1. Wait for hotkey press
         if (!addItemHotkey.WasPressedThisFrame()) return;
         
-        // Grab the database directly Inventory Manager
+        // 2. Grab the database directly Inventory Manager
         ItemDatabase db = InventoryManager.Instance.itemDatabase;
-        
         if (db == null || db.allItems.Count == 0) return;
 
-        // Pick a random item
+        // 3. Pick a random item and create the data
         ItemData randomItemData = db.allItems[Random.Range(0, db.allItems.Count)];
-        
-        // Determine amount and create instance
         int randomAmount = randomItemData.isStackable ? Random.Range(1, 6) : 1;
         ItemInstance newItemInstance = new ItemInstance(randomItemData, randomAmount);
         
-        // Add to inventory
-        //GameObject droppedItemObj = Instantiate(newItemInstance.Data.itemObject, _player.transform , Quaternion.identity);
+        // 4. Spawn and Initialize the item
+        GameObject droppedItemObj = Instantiate(newItemInstance.Data.itemObject, _player.transform.position, Quaternion.identity);
+        if (droppedItemObj.TryGetComponent(out ItemObject itemObject))
+        {
+            itemObject.InitializeItem(newItemInstance);
+            Debug.unityLogger.Log($"Spawned {randomAmount}x {randomItemData.itemName} in the world!");
+        }
 
-        bool itemAdded = InventoryManager.Instance.AddItems(newItemInstance);
-        
-        if (itemAdded) 
-            Debug.unityLogger.Log($"Added {randomAmount}x {randomItemData.itemName}!");
-        else 
-            Debug.unityLogger.Log("Inventory is full!");
     }
 }

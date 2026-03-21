@@ -67,16 +67,10 @@ public class PlayerEquipment : MonoBehaviour
         _currentActiveItem.transform.localPosition = Vector3.zero;
         _currentActiveItem.transform.localRotation = Quaternion.identity;
         
-        // 5. Disable Collision (Prevents picking up the item you are holding)
-        if (_currentActiveItem.TryGetComponent(out Collider2D collision))
-        {
-            collision.enabled = false;
-        }
-        
         // Initialize the active items sprite and data
         if (_currentActiveItem.TryGetComponent(out ItemObject itemObjectScript))
         {
-            itemObjectScript.InitializeItem(itemInSlot);
+            itemObjectScript.InitializeItem(itemInSlot, null, false);
         }
     }
 

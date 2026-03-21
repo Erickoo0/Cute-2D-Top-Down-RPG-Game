@@ -33,12 +33,15 @@ public class ItemObject : MonoBehaviour
         
     }
 
-    public void InitializeItem(ItemInstance newItemInstance, Vector3? dropTarget = null)
+    private void OnDestroy() => _activeSequence?.Kill(); // Kill the animation sequence on destroy
+    
+    public void InitializeItem(ItemInstance newItemInstance, Vector3? dropTarget = null, bool animate = true)
     {
         _itemInstance = newItemInstance;
         _spriteRenderer.sprite = _itemInstance.Data.itemIcon;
         gameObject.name = _itemInstance.Data.itemName;
 
+        if (!animate) return; // Skip the animation
         PlaySpawnAnimation(dropTarget);
     }
 
@@ -89,29 +92,32 @@ public class ItemObject : MonoBehaviour
                 .SetEase(Ease.InQuad));
         }
         
-        // 4. Clean up the sequence reference
-        _activeSequence.OnComplete(() => _activeSequence = null);
+        // 4. Clean up the sequence reference 
+        _activeSequence.OnComplete(() =>
+        {
+            _activeSequence = null;
+            _canBePickedUp = true; // Enable pickup after the animation is finished
+        });
     }
 
-    private async Task TryPickup(Collider2D collision)
+    private async void TryPickup(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && _itemInstance != null)
-        {
-            // 1. Lock out further triggers
-            _canBePickedUp = false; // Set to false since item is now picked up
+        if (!collision.CompareTag("Player") || _itemInstance == null) return;
+        
+        // 1. Lock out further triggers
+        _canBePickedUp = false; // Set to false since item is now picked up
 
-            // 2. Kill the current animation sequence 
-            _activeSequence.Kill();
+        // 2. Kill the current animation sequence 
+        _activeSequence.Kill();
 
-            // 3. Play the vacuum animation towards the player, pause the code here untill animation finishes.
-            await transform.DOMove(collision.transform.position, pullSpeed).SetEase(pullEase).AsyncWaitForCompletion();
+        // 3. Play the vacuum animation towards the player, pause the code here untill animation finishes.
+        await transform.DOMove(collision.transform.position, pullSpeed).SetEase(pullEase).AsyncWaitForCompletion();
             
-            // 4. Execute pickup
-            bool wasPickedUp = InventoryManager.Instance.AddItems(_itemInstance);
-            if (wasPickedUp)
-            {
-                Destroy(gameObject);
-            }
+        // 4. Execute pickup
+        bool wasPickedUp = InventoryManager.Instance.AddItems(_itemInstance);
+        if (wasPickedUp)
+        {
+            Destroy(gameObject);
         }
     }
 }
