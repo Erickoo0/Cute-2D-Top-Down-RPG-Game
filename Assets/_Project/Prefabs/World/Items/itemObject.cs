@@ -49,7 +49,8 @@ public class ItemObject : MonoBehaviour
         gameObject.name = _itemInstance.Data.itemName;
 
         // Set initial sprite
-        _spriteRenderer.sprite = _itemInstance.Data.animated ? GlobalHelper.GetAnimatedSprite(_itemInstance.Data) : _itemInstance.Data.itemIconAnimated[0];
+        if (newItemInstance.Data != null)
+            _spriteRenderer.sprite = _itemInstance.Data.animated ? GlobalHelper.GetAnimatedSprite(_itemInstance.Data) : _itemInstance.Data.itemIconAnimated[0];
         
         if (!animate) return; // Skip the animation
         PlaySpawnAnimation(dropTarget);

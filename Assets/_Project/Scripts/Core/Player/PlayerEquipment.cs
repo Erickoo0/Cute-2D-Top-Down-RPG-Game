@@ -35,6 +35,7 @@ public class PlayerEquipment : MonoBehaviour
     
     private void SetActiveSlotIndex(int index)
     {
+        parentTransform.gameObject.SetActive(true);
         _currentActiveSlotIndex = index;
         // Find the Item Data from slot index
         ItemInstance itemInSlot = InventoryManager.Instance.itemsList[_currentActiveSlotIndex];

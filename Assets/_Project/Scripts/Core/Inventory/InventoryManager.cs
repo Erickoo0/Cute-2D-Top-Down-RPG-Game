@@ -135,6 +135,13 @@ public class InventoryManager : MonoBehaviour, ISaveable
         itemsList[index] = null;
         OnSlotUpdated?.Invoke(index);
     }
+    
+    public void ChangeActiveSlot(int index)
+    {
+        ItemInstance selectedItem = itemsList[index];
+        
+        OnActiveSlotIndexChanged?.Invoke(index);
+    }
 
     public void PopulateSaveData(SaveData saveData)
     {
@@ -190,12 +197,4 @@ public class InventoryManager : MonoBehaviour, ISaveable
             OnSlotUpdated?.Invoke(i);
         }
     }
-
-    public void ChangeActiveSlot(int index)
-    {
-        ItemInstance selectedItem = itemsList[index];
-        
-        OnActiveSlotIndexChanged?.Invoke(index);
-    }
-
 }
