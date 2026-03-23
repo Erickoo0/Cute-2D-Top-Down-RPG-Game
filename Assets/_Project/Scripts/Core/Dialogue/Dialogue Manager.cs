@@ -9,7 +9,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Reference Data")] 
     [SerializeField] private Image dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueName;
-    [SerializeField] private TextMeshProUGUI dialogueBody;
+    [SerializeField] private TypeWriter dialogueBody;
     [SerializeField] private Image dialoguePortrait;
 
     private string[] dialogueLines;
@@ -36,15 +36,21 @@ public class DialogueManager : MonoBehaviour
         {
             SetDialogue(name, body, portrait);
         }
-        // Disable the dialogue panel if it's already active'
         else
         {
-            // Transition to the next line
-            if (dialogueLineIndex < dialogueLines.Length - 1)
+            // 1. If typewriter is still typing, finish it instantly
+            if (dialogueBody.IsTyping) dialogueBody.FinishInstantly();
+            // 2. If typewriter is done typing, move to the next line
+            else if (dialogueLineIndex < dialogueLines.Length - 1)
             {
                 dialogueLineIndex++;
-                dialogueBody.text = dialogueLines[dialogueLineIndex];
-            } else CloseDialogue();
+                dialogueBody.StartTyping(dialogueLines[dialogueLineIndex]);
+            }
+            // 3. If no more lines, close the dialogue
+            else
+            {
+                CloseDialogue();
+            }
         }
 
     }
@@ -58,8 +64,8 @@ public class DialogueManager : MonoBehaviour
         
         // Set the body
         dialogueLines = body;
-        dialogueBody.text = dialogueLines[dialogueLineIndex];
         dialoguePanel.gameObject.SetActive(true);
+        dialogueBody.StartTyping(dialogueLines[dialogueLineIndex]);
         
         // Pause the game
         PauseManager.SetPause(true);
@@ -68,7 +74,6 @@ public class DialogueManager : MonoBehaviour
     private void CloseDialogue()
     {
         dialoguePanel.gameObject.SetActive(false);
-        
         // Unpause the game
         PauseManager.SetPause(false);
     }
