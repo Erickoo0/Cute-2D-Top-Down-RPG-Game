@@ -240,5 +240,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Npc
   dialogueName: Bobby
-  dialogueLine: Hello, my name is Bobby, nice to meet you friend!
+  dialogueLines:
+  - Hi, my name is Bobby.
+  - Nice to meet you.
+  - Im a test NPC meant for testing new features!
   dialoguePortrait: {fileID: -7527145504033472756, guid: 4ec53bce811d1f64a947aabac05f8f16, type: 3}

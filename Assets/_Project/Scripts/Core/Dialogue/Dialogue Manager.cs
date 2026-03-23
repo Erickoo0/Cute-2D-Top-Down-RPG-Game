@@ -12,6 +12,9 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueBody;
     [SerializeField] private Image dialoguePortrait;
 
+    private string[] dialogueLines;
+    private int dialogueLineIndex;
+
     //private int inputTimer;
 
     private void Awake()
@@ -26,7 +29,7 @@ public class DialogueManager : MonoBehaviour
         Instance = this;
     }
     
-    public void ControlDialogue(string name, string body, Sprite portrait)
+    public void ControlDialogue(string name, string[] body, Sprite portrait)
     {
         // Enable the dialogue panel if it's not already active'
         if (!dialoguePanel.gameObject.activeSelf)
@@ -34,15 +37,28 @@ public class DialogueManager : MonoBehaviour
             SetDialogue(name, body, portrait);
         }
         // Disable the dialogue panel if it's already active'
-        else CloseDialogue();
+        else
+        {
+            // Transition to the next line
+            if (dialogueLineIndex < dialogueLines.Length - 1)
+            {
+                dialogueLineIndex++;
+                dialogueBody.text = dialogueLines[dialogueLineIndex];
+            } else CloseDialogue();
+        }
 
     }
     
-    private void SetDialogue(string name, string body, Sprite portrait)
+    private void SetDialogue(string name, string[] body, Sprite portrait)
     {
+        // Set the name, portrait, and index
         dialogueName.text = name;
-        dialogueBody.text = body;
         dialoguePortrait.sprite = portrait;
+        dialogueLineIndex = 0;
+        
+        // Set the body
+        dialogueLines = body;
+        dialogueBody.text = dialogueLines[dialogueLineIndex];
         dialoguePanel.gameObject.SetActive(true);
         
         // Pause the game

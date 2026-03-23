@@ -4,7 +4,7 @@ public class Npc : MonoBehaviour, IInteractable
 {
     [Header("Dialogue Data")] 
     [SerializeField] private string dialogueName;
-    [SerializeField] private string dialogueLine;
+    [SerializeField] private string[] dialogueLines;
     [SerializeField] private Sprite dialoguePortrait;
 
 
@@ -16,7 +16,7 @@ public class Npc : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (!CanInteract()) return;
-        DialogueManager.Instance.ControlDialogue(dialogueName, dialogueLine, dialoguePortrait);
+        DialogueManager.Instance.ControlDialogue(dialogueName, dialogueLines, dialoguePortrait);
     }
 
 
