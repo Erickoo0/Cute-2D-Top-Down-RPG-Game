@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7549566714968836976}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 3264141129822851798}
   - component: {fileID: 5775654112022256840}
   - component: {fileID: 2729579692476846028}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,6 +302,11 @@ MonoBehaviour:
   moveSpeed: 2
   waitTime: 2
   loopWaypoints: 1
+  detectionDistance: 2
+  detectionRadius: 2
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &4838460603127964859
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +316,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6331000749131049093}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -342,7 +347,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5009677075223899658}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -373,7 +378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1655243933479575195}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -404,7 +409,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9070874311036098047}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}

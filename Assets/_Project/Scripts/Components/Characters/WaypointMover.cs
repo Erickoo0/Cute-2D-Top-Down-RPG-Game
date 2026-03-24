@@ -6,6 +6,7 @@ public class WaypointMover : MonoBehaviour
     public Transform waypointParent;
     public float moveSpeed = 2f;
     public float waitTime = 2f;
+    public float maxStartDelay = 4f;
     public bool loopWaypoints = true;
 
     private EntityAnimationController _entityAnimation;
@@ -20,8 +21,12 @@ public class WaypointMover : MonoBehaviour
         
         // 2. Get the waypoint parent
         if (waypointParent == null) waypointParent = transform.Find("Waypoint Parent");
-        
-        if (waypointParent != null) SetupWaypoints();
+
+        if (waypointParent != null)
+        {
+            SetupWaypoints();
+            StartCoroutine(RandomStartDelay());
+        }
 
     }
     
@@ -76,6 +81,14 @@ public class WaypointMover : MonoBehaviour
         // Move to next waypoint
         // Repeat if LoopWaypoints is true
         currentWaypointIndex = loopWaypoints? (currentWaypointIndex + 1) % waypoints.Length : currentWaypointIndex;
+        isWaiting = false;
+    }
+
+    IEnumerator RandomStartDelay()
+    {
+        isWaiting = true;
+        float randomDelay = Random.Range(0.2f, maxStartDelay);
+        yield return new WaitForSeconds(randomDelay);
         isWaiting = false;
     }
 }
