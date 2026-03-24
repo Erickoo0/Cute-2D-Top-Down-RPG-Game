@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4637589897305081309}
   - component: {fileID: 3585913823327191534}
   - component: {fileID: 3662397687984171361}
+  - component: {fileID: 6489739227427479816}
   - component: {fileID: 3324052278730299444}
   - component: {fileID: 3597365950157330232}
   - component: {fileID: 544234680660555763}
@@ -204,6 +205,42 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.969908, y: 0.5263489}
   m_EdgeRadius: 0
+--- !u!58 &6489739227427479816
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295489641667029861}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.5}
+  m_Radius: 0.9
 --- !u!114 &3324052278730299444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,12 +338,8 @@ MonoBehaviour:
   waypointParent: {fileID: 0}
   moveSpeed: 2
   waitTime: 2
+  maxStartDelay: 4
   loopWaypoints: 1
-  detectionDistance: 2
-  detectionRadius: 2
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!1 &4838460603127964859
 GameObject:
   m_ObjectHideFlags: 0

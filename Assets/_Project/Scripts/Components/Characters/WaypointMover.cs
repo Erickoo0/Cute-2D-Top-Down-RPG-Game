@@ -1,25 +1,35 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class WaypointMover : MonoBehaviour
 {
-    public Transform waypointParent;
-    public float moveSpeed = 2f;
-    public float waitTime = 2f;
-    public float maxStartDelay = 4f;
-    public bool loopWaypoints = true;
+    [Header("Movement Settings")] 
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float waitTime = 2f;
+    [SerializeField] private float maxStartDelay = 4f;
+    [SerializeField] private bool loopWaypoints = true;
 
-    private EntityAnimationController _entityAnimation;
+    [Header("Waypoint Settings")]
+    private Transform waypointParent;
     private Vector2[] waypoints;
     private int currentWaypointIndex;
+    [Header("Animation Settings")]
+    private EntityAnimationController _entityAnimation;
+    private CircleCollider2D _entityCollider;
     private bool isWaiting;
+    
 
     private void Start()
     {
-        // 1. Get the Animator 
+        // 1. Get the Collider
+        _entityCollider = GetComponent<CircleCollider2D>();
+        
+        // 2. Get the Animator 
         _entityAnimation = GetComponent<EntityAnimationController>();
         
-        // 2. Get the waypoint parent
+        // 3. Get the waypoint parent
         if (waypointParent == null) waypointParent = transform.Find("Waypoint Parent");
 
         if (waypointParent != null)
@@ -55,6 +65,7 @@ public class WaypointMover : MonoBehaviour
         Vector2 currentPosition = transform.position;
         float distance = Vector2.Distance(currentPosition, target);
         
+        // Move to waypoint 
         if (distance > 0.1f)
         {
             // 1. Calculate direction
@@ -74,14 +85,18 @@ public class WaypointMover : MonoBehaviour
 
     IEnumerator WaitAtWaypoint()
     {
-        // Idle at waypoint for waitTIme
+        // Idle for duration
         isWaiting = true;
         yield return new WaitForSeconds(waitTime);
         
-        // Move to next waypoint
-        // Repeat if LoopWaypoints is true
-        currentWaypointIndex = loopWaypoints? (currentWaypointIndex + 1) % waypoints.Length : currentWaypointIndex;
+        // Check if target was reached (if stopped because of collision)
+        float distance = Vector2.Distance(transform.position, waypoints[currentWaypointIndex]);
+        
+        // If we reached the target, move target to next waypoint
+        if (distance <= 0.1f) currentWaypointIndex = loopWaypoints ? (currentWaypointIndex + 1) % waypoints.Length : currentWaypointIndex;
+        
         isWaiting = false;
+
     }
 
     IEnumerator RandomStartDelay()
@@ -90,5 +105,10 @@ public class WaypointMover : MonoBehaviour
         float randomDelay = Random.Range(0.2f, maxStartDelay);
         yield return new WaitForSeconds(randomDelay);
         isWaiting = false;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!isWaiting) StartCoroutine(WaitAtWaypoint());
     }
 }
