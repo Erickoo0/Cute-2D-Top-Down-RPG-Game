@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 3264141129822851798}
   - component: {fileID: 5775654112022256840}
   - component: {fileID: 2729579692476846028}
+  - component: {fileID: 7485716094007412697}
   m_Layer: 3
   m_Name: NPC
   m_TagString: Untagged
@@ -335,11 +336,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 012bfd76677043b4aad64da3b8d42c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaypointMover
-  waypointParent: {fileID: 0}
   moveSpeed: 2
   waitTime: 2
   maxStartDelay: 4
   loopWaypoints: 1
+--- !u!114 &7485716094007412697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295489641667029861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22b118d02523bf4e839eff9262a3a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpeechBubbleManager
+  speechBubble: {fileID: 8936567896374602222, guid: 2c8d6c5837f715f46a7e77ff2af6fd88, type: 3}
+  speechBubbleLines:
+  - Hello Man
+  - Is this thing working?
+  - testing 1,2,3
+  speechBubbleTypeSpeed: 0.05
+  speechBubbleMinWaitTime: 3
+  speechBubbleMaxWaitTime: 9
+  speechBubbleDuration: 2.5
 --- !u!1 &4838460603127964859
 GameObject:
   m_ObjectHideFlags: 0

@@ -5051,6 +5051,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2013885382}
     m_Modifications:
+    - target: {fileID: 1205716377941386969, guid: e0a23f9a59f64304a9cc415416d449d1, type: 3}
+      propertyPath: speechBubblePrefab
+      value: 
+      objectReference: {fileID: 8936567896374602222, guid: 2c8d6c5837f715f46a7e77ff2af6fd88, type: 3}
     - target: {fileID: 1367635239937598227, guid: e0a23f9a59f64304a9cc415416d449d1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.42
@@ -18490,6 +18494,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6035676324328973812, guid: 43fcbecbe515bf34bbc5296af2ed4b3b, type: 3}
+      propertyPath: speechBubblePrefab
+      value: 
+      objectReference: {fileID: 8936567896374602222, guid: 2c8d6c5837f715f46a7e77ff2af6fd88, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
