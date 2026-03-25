@@ -31,6 +31,16 @@ public class EntityAnimationController : MonoBehaviour
         _animator.SetBool("IsWalking", false);
     }
     
+    public void FaceDirection(Vector2 lookDirection)
+    {
+        if (_animator == null) return;
+
+        Vector2 snappedDirection = GetSnappedDirection(lookDirection);
+        
+        _animator.SetFloat("LastInputX", snappedDirection.x);
+        _animator.SetFloat("LastInputY", snappedDirection.y);
+    }
+    
     private Vector2 GetSnappedDirection(Vector2 moveInput)
     {
         if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))

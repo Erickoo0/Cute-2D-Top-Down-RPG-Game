@@ -109,6 +109,11 @@ public class WaypointMover : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!isWaiting) StartCoroutine(WaitAtWaypoint());
+        if (!isWaiting)
+        {
+            StartCoroutine(WaitAtWaypoint());
+        }
+        Vector2 lookDirection = (collision.transform.position - transform.position).normalized;
+        _entityAnimation?.FaceDirection(lookDirection);
     }
 }
