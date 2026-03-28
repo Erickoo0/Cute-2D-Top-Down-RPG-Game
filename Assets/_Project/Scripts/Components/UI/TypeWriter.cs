@@ -16,9 +16,9 @@ public class TypeWriter : MonoBehaviour
 
     private void Awake() => _textComponent = GetComponent<TMP_Text>();
     
-    public void StartTyping(DialogueNode body)
+    public void StartTyping(string body)
     {
-        _fullText = body.text;
+        _fullText = body;
         // Stop the previous coroutine if it's still running'
         if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
         

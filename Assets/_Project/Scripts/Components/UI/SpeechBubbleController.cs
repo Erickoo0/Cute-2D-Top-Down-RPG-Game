@@ -9,7 +9,7 @@ public class SpeechBubbleController : MonoBehaviour
     [SerializeField] private string[] speechBubbleLines;
     
     [Header("Speech Bubble Settings")]
-    [SerializeField] private Vector3 spawnOffset = new Vector3(0f, 1f, 0f);
+    [SerializeField] private Vector3 spawnOffset = new Vector3(0f, 2f, 0f);
     [SerializeField] private float speechBubbleMinWaitTime = 3f;
     [SerializeField] private float speechBubbleMaxWaitTime = 9f;
     [SerializeField] private float speechBubbleDuration = 2.5f;
