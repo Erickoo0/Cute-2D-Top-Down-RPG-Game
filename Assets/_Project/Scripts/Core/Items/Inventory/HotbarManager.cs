@@ -12,7 +12,7 @@ public class HotbarManager : MonoBehaviour
     public event Action OnUseItemInput;
 
     private void Awake()
-    {        
+    {       
         if (Instance != null && Instance != this)
         {
             Debug.unityLogger.Log("Multiple HotbarManagers detected. Disabling script.");

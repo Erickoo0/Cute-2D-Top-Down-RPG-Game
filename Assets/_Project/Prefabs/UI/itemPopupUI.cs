@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 public class ItemPopup : MonoBehaviour
 {
     public ItemInstance itemInstance;
-    public Image itemIcon;
+    public Image itemIconDisplay;
     public TextMeshProUGUI itemName;
     public TextMeshProUGUI itemStackSize;
 
@@ -14,21 +14,20 @@ public class ItemPopup : MonoBehaviour
 
     private void Update()
     {
-        if (itemInstance?.Data != null && itemInstance.Data.animated)
-            itemIcon.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
+        if (itemInstance?.Data == null || !itemInstance.Data.IsAnimated)
+            return;
+        
+        itemIconDisplay.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
     }
     
     public void SetPopUp(ItemInstance newItem)
     {
         itemInstance = newItem;
+        
         // Set the text
-        itemName.text = itemInstance.Data.itemName;
+        itemName.text = itemInstance.Data.ItemName;
         itemStackSize.text = itemInstance.stackSize.ToString();
-        
-        if (!itemInstance.Data.animated)
-            itemIcon.sprite = itemInstance.Data.itemIconAnimated[0];
-        
+ 
         Destroy(gameObject, lifetime);
-        
     }
 }

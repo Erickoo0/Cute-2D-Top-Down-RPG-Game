@@ -12,16 +12,15 @@ public class HotbarSlotUI : MonoBehaviour, IStorageSlot
     [SerializeField] private Image itemIconDisplay;
     [SerializeField] private TextMeshProUGUI itemNameText;
     [SerializeField] private TextMeshProUGUI itemStackText;
-
+    
     private bool _isBeingDragged = false;
 
     private void Update()
     {
-        // Only run this if the item is valid, animated, and not hidden by dragging
-        if (itemInstance?.Data != null && itemInstance.Data.animated && !_isBeingDragged)
-        {
-            itemIconDisplay.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
-        }
+        if (itemInstance?.Data == null || _isBeingDragged)
+            return;
+        
+        itemIconDisplay.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
     }
     
     public void RefreshSlotUI()
@@ -31,14 +30,9 @@ public class HotbarSlotUI : MonoBehaviour, IStorageSlot
         bool shouldShow = hasItem && !_isBeingDragged; // Hides elements while being dragged
 
         // Set the text
-        itemNameText.text = hasItem ? item.Data.itemName : null;
+        itemNameText.text = hasItem ? item.Data.ItemName : null;
         itemStackText.text = hasItem ? item.stackSize.ToString() : null;
-        
-        // If not animated, set the sprite
-        if (hasItem && !itemInstance.Data.animated)
-            itemIconDisplay.sprite = item.Data.itemIconAnimated[0];
-        
-        
+        itemIconDisplay.sprite = itemInstance.Data.ItemIcon[0];
         itemIconDisplay.enabled = shouldShow;
     }
 
