@@ -65,10 +65,6 @@ public class DragManager : MonoBehaviour
             ghostStack.text = _sourceSlot.itemInstance.stackSize.ToString();
             _ghostIconRect.position = _currentMousePosition;
             
-            // If not animated, set the sprite
-            if (_sourceSlot.itemInstance.Data.ItemIcon.Length == 1)
-                ghostIcon.sprite = _sourceSlot.itemInstance.Data.ItemIcon[0];
-            
             // Hide item from source slot to "pick it up"
             ToggleGhost(true);
         }
@@ -79,8 +75,9 @@ public class DragManager : MonoBehaviour
         if (!ghostIcon.enabled) return;
         
         _ghostIconRect.position = _currentMousePosition;
-        if (_sourceSlot.itemInstance.Data.ItemIcon.Length > 1) 
-            ghostIcon.sprite = GlobalHelper.GetAnimatedSprite(_sourceSlot.itemInstance.Data);
+        if (_sourceSlot.itemInstance.Data.ItemIcon == null) return; 
+        
+        ghostIcon.sprite = GlobalHelper.GetAnimatedSprite(_sourceSlot.itemInstance.Data);
     }
 
     private void EndDrag()

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    
     [SerializeField] private GameObject inventorySlotPrefab; // Inventory slot to spawn
     [SerializeField] private GameObject hotbarSlotPrefab; // Hotbar slot to spawn
     [SerializeField] private Transform inventoryPanel;

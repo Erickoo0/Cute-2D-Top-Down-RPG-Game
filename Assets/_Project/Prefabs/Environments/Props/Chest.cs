@@ -71,7 +71,7 @@ public class Chest : MonoBehaviour, IInteractable
             Vector3 targetPos = CalculateDropPosition(currentAngle);
             
             // 2. Spawn the object at the spawnPos
-            GameObject droppedItemObj = Instantiate(itemDrop.itemData.itemObject, spawnPos, Quaternion.identity);
+            GameObject droppedItemObj = Instantiate(itemDrop.itemData.ItemObject, spawnPos, Quaternion.identity);
             
             // 3. Check if the droppedItemObj has ItemObject component, if so, initialize it
             if (droppedItemObj.TryGetComponent(out ItemObject itemObject))

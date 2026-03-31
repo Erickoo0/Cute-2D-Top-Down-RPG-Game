@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: ItemDataCoin
   m_EditorClassIdentifier: Assembly-CSharp::ItemDataCoin
   itemID: 
-  itemIconAnimated:
+  itemIcon:
   - {fileID: -192515303, guid: 5657a16119f23ac41be370f0c2db90b8, type: 3}
   - {fileID: 283125078, guid: 5657a16119f23ac41be370f0c2db90b8, type: 3}
   - {fileID: 1041631521, guid: 5657a16119f23ac41be370f0c2db90b8, type: 3}
   - {fileID: 629004202, guid: 5657a16119f23ac41be370f0c2db90b8, type: 3}
   itemName: Coin
   itemDescription: 
+  itemValue: 0
   itemObject: {fileID: 3666771714786422289, guid: 763ed809e310f934ab2388063799c3e8, type: 3}
-  animated: 1
   isStackable: 1
   maxStackSize: 60
   isUsable: 0

@@ -365,7 +365,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 687aeaacbfb1d7a4f9b4fdaaa2184e70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPopup
-  itemIcon: {fileID: 5653008570370362245}
+  itemInstance:
+    stackSize: 0
+  itemIconDisplay: {fileID: 5653008570370362245}
   itemName: {fileID: 2575140665760511560}
   itemStackSize: {fileID: 7805127363586211919}
   lifetime: 3

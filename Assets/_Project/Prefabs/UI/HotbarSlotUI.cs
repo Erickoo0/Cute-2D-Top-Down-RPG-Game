@@ -4,24 +4,23 @@ using TMPro;
 
 public class HotbarSlotUI : MonoBehaviour, IStorageSlot
 {
-    //public int slotScriptIndex;
-    [field: SerializeField] public int Index { get; private set; }
+    public int slotScriptIndex;
+    public int Index => slotScriptIndex;
     public ItemInstance itemInstance => InventoryManager.Instance.itemsList[slotScriptIndex];
 
     [Header("UI References")]
     [SerializeField] private Image itemIconDisplay;
     [SerializeField] private TextMeshProUGUI itemNameText;
     [SerializeField] private TextMeshProUGUI itemStackText;
-
+    
     private bool _isBeingDragged = false;
-
-    private bool ShouldAnimate => itemInstance?.Data != null && itemInstance.Data.IsAnimated && !_isBeingDragged;
 
     private void Update()
     {
-        if (ShouldAnimate)
-            itemIconDisplay.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
+        if (itemInstance?.Data == null || _isBeingDragged)
+            return;
         
+        itemIconDisplay.sprite = GlobalHelper.GetAnimatedSprite(itemInstance.Data);
     }
     
     public void RefreshSlotUI()
@@ -33,12 +32,7 @@ public class HotbarSlotUI : MonoBehaviour, IStorageSlot
         // Set the text
         itemNameText.text = hasItem ? item.Data.ItemName : null;
         itemStackText.text = hasItem ? item.stackSize.ToString() : null;
-        
-        // If not animated, set the sprite
-        if (hasItem && itemInstance.Data.ItemIcon.Length == 1)
-            itemIconDisplay.sprite = item.Data.ItemIcon[0];
-        
-        
+        itemIconDisplay.sprite = itemInstance.Data.ItemIcon[0];
         itemIconDisplay.enabled = shouldShow;
     }
 

@@ -13,9 +13,12 @@ public static class GlobalHelper
     public static Sprite GetAnimatedSprite(ItemData itemData)
     {
         // Safety Check
-        if (itemData == null) return null;
+        if (itemData == null || itemData.ItemIcon == null || itemData.ItemIcon.Length == 0) return null;
 
-        // Animation Logic, if not animated, method will return frameIndex 0
+        // If there is only 1 sprite, simply return the sprite
+        if (itemData.ItemIcon.Length == 1) return itemData.ItemIcon[0];
+        
+        // If more than 1 sprite, animate it
         int frameIndex = Mathf.FloorToInt(Time.time * _animationFPS) % itemData.ItemIcon.Length;
         return itemData.ItemIcon[frameIndex];
     }

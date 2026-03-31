@@ -37,20 +37,15 @@ public class ItemObject : MonoBehaviour
 
     private void Update()
     {
-        if (_itemInstance?.Data != null && _itemInstance.Data.animated)
-        {
-            _spriteRenderer.sprite = GlobalHelper.GetAnimatedSprite(_itemInstance.Data);
-        }
+        if (_itemInstance?.Data == null || _itemInstance.Data.ItemIcon == null) return;
+        
+        _spriteRenderer.sprite = GlobalHelper.GetAnimatedSprite(_itemInstance.Data);
     }
     
     public void SetItemObject(ItemInstance newItemInstance, Vector3? dropTarget = null, bool animate = true)
     {
         _itemInstance = newItemInstance;
-        gameObject.name = _itemInstance.Data.itemName;
-
-        // Set initial sprite
-        if (newItemInstance.Data != null)
-            _spriteRenderer.sprite = _itemInstance.Data.animated ? GlobalHelper.GetAnimatedSprite(_itemInstance.Data) : _itemInstance.Data.itemIcon[0];
+        gameObject.name = _itemInstance.Data.ItemName;
         
         if (!animate) return; // Skip the animation
         PlaySpawnAnimation(dropTarget);
