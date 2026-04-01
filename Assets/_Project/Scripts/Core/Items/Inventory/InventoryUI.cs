@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Manages the visual representation of the player's inventory. 
@@ -9,8 +10,9 @@ public class InventoryUI : MonoBehaviour
 {
     [SerializeField] private GameObject inventorySlotPrefab; // Inventory slot to spawn
     [SerializeField] private GameObject hotbarSlotPrefab; // Hotbar slot to spawn
-    [SerializeField] private Transform inventoryPanel;
-    [SerializeField] private Transform hotbarPanel;
+    [SerializeField] private GameObject inventoryMenuPanel;
+    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject hotbarPanel;
     [SerializeField] private int hotbarSize;
 
     [Header("Selection Frame Settings")] 
@@ -54,16 +56,24 @@ public class InventoryUI : MonoBehaviour
         selectionFrame.position = Vector3.Lerp(selectionFrame.position, _targetPosition, Time.deltaTime * lerpSpeed);
     }
     
+    public void ToggleMenu(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+        if (!inventoryMenuPanel.activeSelf)EventBus.RequestOpenMenu(inventoryMenuPanel);
+        else if (inventoryMenuPanel.activeSelf) EventBus.RequestCloseMenu(inventoryMenuPanel);
+    }
+    
     private void SetupUI()
     {
         for (int i = 0; i < InventoryManager.Instance.itemsList.Length; i++)
         {
             // Determine if this slot should go to hotbar or inventory
-            Transform targetParent = (i < hotbarSize) ? hotbarPanel : inventoryPanel;
+            GameObject targetParent = (i < hotbarSize) ? hotbarPanel : inventoryPanel;
+            Transform targetParentTransform = targetParent.transform;
             
             // Instantiate the slots
             GameObject prefab = (i < hotbarSize) ? hotbarSlotPrefab : inventorySlotPrefab;
-            GameObject slot = Instantiate(prefab, targetParent);
+            GameObject slot = Instantiate(prefab, targetParentTransform);
             
             if (slot.TryGetComponent(out InventorySlotUI storageSlot))
             {

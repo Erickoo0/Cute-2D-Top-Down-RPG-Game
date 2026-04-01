@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Cancel",
+                    "name": "Close",
                     "type": "Button",
                     "id": "b345f99a-b5f4-40da-b77b-472e09b2a3ef",
                     "expectedControlType": "",
@@ -61,9 +61,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Menu",
+                    "name": "Inventory Menu",
                     "type": "Button",
                     "id": "69636ad8-7cf5-4b02-a44f-c25ba9e8405a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Stats Menu",
+                    "type": "Button",
+                    "id": "2de7a19d-e79b-482f-b568-383d347e2ec8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Map Menu",
+                    "type": "Button",
+                    "id": "966d462d-55e9-41c0-9edb-fdd2da79fb25",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -573,7 +591,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Cancel",
+                    "action": "Close",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -584,7 +602,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Menu",
+                    "action": "Inventory Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "add9e40a-1793-4807-876c-9ba48696c51d",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Stats Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc5d6bfb-8691-49f5-9933-17c31fa7eb55",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Map Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -604,10 +644,10 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Cancel",
+                    "name": "Close",
                     "type": "Button",
                     "id": "d4e0216c-d42a-431b-b5b6-c9dc92f0a478",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -685,9 +725,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Menu",
+                    "name": "Inventory Menu",
                     "type": "Button",
                     "id": "517f0f37-c098-40b0-91a4-7a812eaabcc8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Stats Menu",
+                    "type": "Button",
+                    "id": "fe01ffa0-665e-4f69-82f7-086828795f35",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Map Menu",
+                    "type": "Button",
+                    "id": "337edfa9-61d3-44c2-a5fe-df1b91ad45b1",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -713,7 +771,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
-                    "action": "Cancel",
+                    "action": "Close",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -867,7 +925,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Menu",
+                    "action": "Inventory Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e14476fe-1c48-45b1-8aa1-910d0f58b2bf",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Stats Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "166cb9d9-2733-425a-acb5-10949fbce1dd",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Map Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
