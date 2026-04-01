@@ -29,8 +29,10 @@ public class UIManager : MonoBehaviour
             PauseManager.SetPause(true);
         }
         
-        // 2. Set Menu and add to stack
+        // 2. Set Menu and add to stack (if pause menu is not active)
+        if (PauseManager.Instance.PauseMenuPanel.activeSelf) return;
         menu.SetActive(true);
+        menu.transform.SetAsLastSibling(); // Set the menu to be the last sibling for draw order
         _panelStack.Push(menu);
     }
 

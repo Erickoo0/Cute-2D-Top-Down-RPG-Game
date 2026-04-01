@@ -19,19 +19,19 @@ public class ShopManager : MonoBehaviour
     
     private void SetupShop(string dialogueEvent, object data)
     {
-        if (dialogueEvent == "ShopOpen")
-        {
-            // Cast the object back to an array type
-            ItemData[] shopList = data as ItemData[];
-            
-            // Safety Check
-            if (shopList == null || shopList.Length == 0) return;
-            
-            CreateShopItems(shopList);
-            
-            // Send request to UIManager to handle the showing of UI
-            EventBus.RequestOpenMenu(shopMainPanel);
-        }
+        if (dialogueEvent != "ShopOpen") return;
+        
+        // Cast the object back to an array type
+        ItemData[] shopList = data as ItemData[];
+        
+        // Safety Check
+        if (shopList == null || shopList.Length == 0) return;
+        
+        CreateShopItems(shopList);
+        
+        // Send request to UIManager to handle the showing of UI
+        EventBus.RequestOpenMenu(shopMainPanel);
+        
     }
 
     private void CreateShopItems(ItemData[] shopList)

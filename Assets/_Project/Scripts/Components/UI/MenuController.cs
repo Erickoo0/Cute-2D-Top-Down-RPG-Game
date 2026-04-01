@@ -6,11 +6,10 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject menuPanel;
     
-    public void TogglePauseMenu(InputAction.CallbackContext context)
+    public void ToggleMenu(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        
-        EventBus.RequestOpenMenu(menuPanel);
-        Debug.Log("Menu Opened");
+        if (!menuPanel.activeSelf)EventBus.RequestOpenMenu(menuPanel);
+        else if (menuPanel.activeSelf) EventBus.RequestCloseMenu(menuPanel);
     }
 }
