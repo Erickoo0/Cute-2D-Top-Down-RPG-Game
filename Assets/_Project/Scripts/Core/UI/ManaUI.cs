@@ -4,26 +4,27 @@ using UnityEngine.UI;
 
 public class ManaUI : MonoBehaviour
 {
+    [Header("References")] 
+    [SerializeField] private Mana manaUI;
     [SerializeField] private Image mpBarFill;
     [SerializeField] TextMeshProUGUI mpText;
-    private Mana mana;
+
 
     private void Start()
     {
-        mana = GameObject.FindGameObjectWithTag("Player").GetComponent<Mana>();
-        mana.OnMpUpdated += UpdateManaUI;
-        UpdateManaUI(mana.MpCurrent);
+        manaUI.OnMpUpdated += UpdateManaUI;
+        UpdateManaUI(manaUI.MpCurrent);
     }
 
     private void OnDestroy()
     {
-        mana.OnMpUpdated -= UpdateManaUI;
+        manaUI.OnMpUpdated -= UpdateManaUI;
     }
 
     private void UpdateManaUI(float mpCurrent)
     {
-        float mpPercent = mpCurrent / mana.mpMax;
+        float mpPercent = mpCurrent / manaUI.mpMax;
         mpBarFill.fillAmount = mpPercent;
-        mpText.text = ($"Mp: {mpCurrent}/{mana.mpMax}");
+        mpText.text = ($"Mp: {mpCurrent}/{manaUI.mpMax}");
     }
 }

@@ -6,58 +6,39 @@ using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    public static ShopManager Instance { get; private set; }
 
     [Header("References")] 
     [SerializeField] private GameObject shopMainPanel;
     [SerializeField] private GameObject shopItemPanel;
     [SerializeField] private GameObject shopItemPrefab;
-    [SerializeField] private InputAction menuKey;
-    
-    private void OnEnable() => menuKey.Enable();
-    
-    private void OnDisable() => menuKey.Disable();
     
     private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Debug.unityLogger.Log("Multiple ShopManagers detected. Disabling script.");
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        
-        // Event listeners
+    { 
         EventBus.OnDialogueEventRequested += SetupShop;
-    }
-
-    private void Update()
-    {
-        if  (menuKey.WasPressedThisFrame())
-        {
-            if (shopMainPanel.activeSelf) shopMainPanel.SetActive(false);
-        }
     }
     
     private void SetupShop(string dialogueEvent, object data)
     {
-        if (dialogueEvent == "ShopOpen")
-        {
-            // Cast the object back to an array type
-            ItemData[] shopList = data as ItemData[];
-            
-            // Safety Check
-            if (shopList == null || shopList.Length == 0) return;
-            
-            shopMainPanel.SetActive(true);
-            CreateShopItems(shopList);
-        }
+        if (dialogueEvent != "ShopOpen") return;
+        
+        // Cast the object back to an array type
+        ItemData[] shopList = data as ItemData[];
+        
+        // Safety Check
+        if (shopList == null || shopList.Length == 0) return;
+        
+        CreateShopItems(shopList);
+        
+        // Send request to UIManager to handle the showing of UI
+        EventBus.RequestOpenMenu(shopMainPanel);
+        
     }
 
     private void CreateShopItems(ItemData[] shopList)
     {
+        // Destroy old items
+        foreach (Transform child in shopItemPanel.transform) Destroy(child.gameObject);
+        
         foreach (ItemData shopItemData in shopList)
         {
             // Create the button and get the components

@@ -4,27 +4,28 @@ using UnityEngine.UI;
 
 public class HealthUI : MonoBehaviour
 {
+    [Header("UI References")] 
+    [SerializeField] private Health healthUI;
     [SerializeField] private Image hpBarFill;
     [SerializeField] private TextMeshProUGUI hpText;
     //[SerializeField] private Text healthText;
-    private Health health;
+
 
     private void Start()
     {
-        health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
-        health.OnHpUpdated += UpdateHealthUI;
-        UpdateHealthUI(health.HpCurrent);
+        healthUI.OnHpUpdated += UpdateHealthUI;
+        UpdateHealthUI(healthUI.HpCurrent);
     }
 
     private void OnDestroy()
     {
-        health.OnHpUpdated -= UpdateHealthUI;
+        healthUI.OnHpUpdated -= UpdateHealthUI;
     }
 
     private void UpdateHealthUI(float hpCurrent)
     {
-        float hpPercent = hpCurrent / health.hpMax;
+        float hpPercent = hpCurrent / healthUI.hpMax;
         hpBarFill.fillAmount = hpPercent;
-        hpText.text = ($"Hp: {hpCurrent}/{health.hpMax}");
+        hpText.text = ($"Hp: {hpCurrent}/{healthUI.hpMax}");
     }
 }
