@@ -7,8 +7,9 @@ namespace Quest
     {
         public static QuestManager Instance { get; private set; }
 
-        private List<QuestSo> _questList = new List<QuestSo>();
-        public List<QuestSo> QuestList => _questList;
+        private List<QuestActive> _questList = new List<QuestActive>();
+        
+        public List<QuestActive> QuestList => _questList;
         
         private void Awake()
         {
@@ -21,15 +22,38 @@ namespace Quest
 
             Instance = this;
         }
-        
-        public void AddQuest(QuestSo quest)
+
+        private void OnEnable() => EventBus.OnUpdateQuestObjectiveRequested += HandleObjectiveUpdate;
+
+        private void OnDisable() => EventBus.OnUpdateQuestObjectiveRequested -= HandleObjectiveUpdate;
+
+        private void HandleObjectiveUpdate(string targetID, int amount)
         {
-            _questList.Add(quest);
+            foreach (QuestActive questActive in _questList)
+            {
+                if (questActive.IsCompleted) continue; // Skip the quest if its already completed
+                
+                // Look through every objective in the quest, and check if Event target ID matches the objective target ID
+                for (int i = 0; i < questActive.QuestData.QuestObjectives.Count; i++)
+                {
+                    // If it does, add the amount to the objective progress
+                    if (questActive.QuestData.QuestObjectives[i].TargetID == targetID)
+                    {
+                        questActive.AddObjectiveProgress(i, amount);
+                    }
+                }
+            }
         }
         
-        public void RemoveQuest(QuestSo quest)
+        public void AcceptQuest(QuestSo questData)
         {
-            _questList.Remove(quest);
+            // Safety Check
+            if (questData == null) return;
+            // Check if we already have the quest to avoid duplicates
+            if (_questList.Exists(q => q.QuestData.QuestID == questData.QuestID)) return;
+            
+            _questList.Add(new QuestActive(questData));
+            Debug.Log($"Quest {questData.QuestName} accepted.");
         }
 
     }
