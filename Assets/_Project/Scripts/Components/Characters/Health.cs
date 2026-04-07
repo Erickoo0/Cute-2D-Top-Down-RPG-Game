@@ -42,12 +42,8 @@ public class Health : MonoBehaviour
                 OnHpUpdated?.Invoke(hpCurrent);
             }
 
-            // If health hit zero, notify death listeners.
-            if (hpCurrent <= 0 && !_isDead)
-            {
-                OnDeath?.Invoke();
-                _isDead = true;
-            }
+            // If health hit zero
+            if (hpCurrent <= 0 && !_isDead) SetDead();
         }
     }
     
@@ -93,5 +89,12 @@ public class Health : MonoBehaviour
         _hpHealedPerTick = (hpHealAmount / hpHealDuration) * _hpHealTimerMax;
         _hpHealedMax = hpHealAmount;
         _hpHealed = 0;
+    }
+
+    private void SetDead()
+    {
+        _isDead = true;
+        OnDeath?.Invoke();
+        Destroy(gameObject);
     }
 }
