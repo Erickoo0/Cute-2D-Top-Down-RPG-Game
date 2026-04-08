@@ -24,7 +24,7 @@ public class CombatController : MonoBehaviour
         // Gather the context 
         CombatContext contextData = new CombatContext
         {
-            attacker = gameObject,
+            source = gameObject,
             mousePosition = _mainCam.ScreenToWorldPoint(_rawMousePosition),
             userPosition = transform.position,
             facingDirection = transform.right // Add logic later
@@ -32,6 +32,6 @@ public class CombatController : MonoBehaviour
         
         // Execute attack module
         currentAttack.Execute(contextData);
-        Debug.Log($"{contextData.userPosition} : {contextData.attacker} : {contextData.mousePosition}");
+        Debug.Log($"{contextData.userPosition} : {contextData.source} : {contextData.mousePosition}");
     }
 }

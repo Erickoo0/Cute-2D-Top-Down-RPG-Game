@@ -8,6 +8,8 @@ public abstract class HitBox : MonoBehaviour
     // Every hitbox must implement this and define their own logic to check for hits
     public abstract void CheckForHits(DamageData data);
 
+    public abstract void ScaleVisual(GameObject attackFX);
+
     protected void SendDamage(DamageData data, Collider2D victimCollider)
     {
         if (victimCollider.TryGetComponent<IDamagable>(out IDamagable victim))
