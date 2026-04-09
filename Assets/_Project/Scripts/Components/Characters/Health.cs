@@ -6,6 +6,12 @@ public class Health : MonoBehaviour
     [Header("HP Settings")]
     public float hpMax = 100f;
     [SerializeField] private float hpCurrent;
+
+    [Header("Entity References")] [Tooltip("The actual object the health component belongs to")] 
+    [SerializeField] private GameObject entityRoot;
+
+    [Header("Behavior Settings")] 
+    [SerializeField] private bool destroyOnDeath = true;
     
     private bool _isDead = false;
     
@@ -16,9 +22,7 @@ public class Health : MonoBehaviour
     private float _hpHealedMax;
     private float _hpHealedPerTick;
     
-    // Fired whenever health changes, so UI or other systems can refresh.
     public event Action<float> OnHpUpdated;
-    // Fired when health reaches 0.
     public event Action OnDeath;
     
     // Health Property
@@ -42,19 +46,16 @@ public class Health : MonoBehaviour
                 OnHpUpdated?.Invoke(hpCurrent);
             }
 
-            // If health hit zero, notify death listeners.
-            if (hpCurrent <= 0 && !_isDead)
-            {
-                OnDeath?.Invoke();
-                _isDead = true;
-            }
+            // If health hit zero
+            if (hpCurrent <= 0 && !_isDead) SetDead();
         }
     }
     
     public bool HpIsHealingOverTime => _hpHealed < _hpHealedMax;
 
-    private void Start()
+    private void Awake()
     {
+        if (entityRoot == null) entityRoot = gameObject;
         if (hpCurrent <= 0) hpCurrent = hpMax;
     }
     
@@ -93,5 +94,12 @@ public class Health : MonoBehaviour
         _hpHealedPerTick = (hpHealAmount / hpHealDuration) * _hpHealTimerMax;
         _hpHealedMax = hpHealAmount;
         _hpHealed = 0;
+    }
+
+    private void SetDead()
+    {
+        _isDead = true;
+        OnDeath?.Invoke();
+        if (destroyOnDeath) Destroy(entityRoot);
     }
 }

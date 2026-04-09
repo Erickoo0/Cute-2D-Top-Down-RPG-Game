@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5637659010715727303}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6253119989331678452}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 35731710190991475}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint
   m_TagString: Untagged
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1276012537164399320}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
@@ -143,7 +143,8 @@ GameObject:
   - component: {fileID: 1089657946280949265}
   - component: {fileID: -1747576445313389302}
   - component: {fileID: 3685750868421853756}
-  m_Layer: 0
+  - component: {fileID: 6447096566392552272}
+  m_Layer: 3
   m_Name: Neutral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -409,6 +410,18 @@ MonoBehaviour:
   healthTarget: {fileID: -1747576445313389302}
   healthBarRef: {fileID: 0}
   showText: 0
+--- !u!114 &6447096566392552272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7531220670705793847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d0bacc308dc0443abfddf1b3c8e0b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HurtBox
 --- !u!1 &8755887523427810583
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2425390637808921781}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Waypoint Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
