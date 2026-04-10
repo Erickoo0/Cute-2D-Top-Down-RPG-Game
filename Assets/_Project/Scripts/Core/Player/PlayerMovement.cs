@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     
     public void Move(InputAction.CallbackContext context)
     {
-        _entityMover.SetMOveDirection(context.ReadValue<Vector2>());
+        _entityMover.SetMoveDirection(context.ReadValue<Vector2>());
     }
 }
 

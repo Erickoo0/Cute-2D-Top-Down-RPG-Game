@@ -51,7 +51,7 @@ public class WaypointMover : MonoBehaviour
     {
         if (PauseManager.IsGamePaused || _isWaiting || _waypoints == null)
         {
-            _entityMover.SetMOveDirection(Vector2.zero);          
+            _entityMover.SetMoveDirection(Vector2.zero);          
             return;
         }
         
@@ -69,12 +69,12 @@ public class WaypointMover : MonoBehaviour
         {
             // Calculate direction and pass it to the Entity Mover
             Vector2 moveDirection = (target - currentPosition).normalized;
-            _entityMover.SetMOveDirection(moveDirection);
+            _entityMover.SetMoveDirection(moveDirection);
         }
         else
         {   
             // Stop the movement and wait once we reach the destination
-            _entityMover.SetMOveDirection(Vector2.zero);
+            _entityMover.SetMoveDirection(Vector2.zero);
             StartCoroutine(WaitAtWaypoint(true));
         }
     }
@@ -83,7 +83,7 @@ public class WaypointMover : MonoBehaviour
     {
         // Idle for duration
         _isWaiting = true;
-        _entityMover.SetMOveDirection(Vector2.zero);
+        _entityMover.SetMoveDirection(Vector2.zero);
         
         yield return new WaitForSeconds(waitTime);
         
@@ -108,7 +108,7 @@ public class WaypointMover : MonoBehaviour
         if (!_isWaiting)
         {
             // Stop movement
-            _entityMover.SetMOveDirection(Vector2.zero);
+            _entityMover.SetMoveDirection(Vector2.zero);
             StartCoroutine(WaitAtWaypoint(false));
         }
         // Look at player / object

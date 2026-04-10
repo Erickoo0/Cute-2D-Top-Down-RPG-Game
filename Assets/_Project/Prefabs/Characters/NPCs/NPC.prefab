@@ -384,6 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityMover
   moveSpeed: 100
+  knockbackDecay: 12
 --- !u!1 &4838460603127964859
 GameObject:
   m_ObjectHideFlags: 0

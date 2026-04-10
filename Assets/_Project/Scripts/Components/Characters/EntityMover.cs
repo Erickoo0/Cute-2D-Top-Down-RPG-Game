@@ -5,11 +5,13 @@ using UnityEngine;
 public class EntityMover : MonoBehaviour
 {
     [Header("Movement Settings")] 
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed = 175f;
+    [SerializeField] private float knockbackDecay = 12f;
+    private bool _isKnockedBack = false;
+    private float _knockbackTimer;
     
     private Rigidbody2D _rigidbody;
     private Vector2 _moveDirection;
-    private bool _canMove = true;
     
     public Vector2 MoveDirection => _moveDirection;
     
@@ -23,13 +25,36 @@ public class EntityMover : MonoBehaviour
             return;
         }
 
-        if (_canMove)
+        if (_isKnockedBack)
         {
-            _rigidbody.linearVelocity = _moveDirection * (moveSpeed * Time.fixedDeltaTime);
+            // When knocked back, actively apply friction to slow down speed
+            _rigidbody.linearVelocity = Vector2.Lerp(_rigidbody.linearVelocity, Vector2.zero, knockbackDecay * Time.fixedDeltaTime); 
+            
+            // Snap velocity when close to zero
+            if (_rigidbody.linearVelocity.sqrMagnitude < 0.01f) 
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+                _isKnockedBack = false; // Give control back immediately!
+            }
+            else
+            {
+                // Fallback Timer (in case they are pushed against a treadmill or moving platform)
+                _knockbackTimer -= Time.fixedDeltaTime;
+                if (_knockbackTimer <= 0f)
+                {
+                    _isKnockedBack = false;
+                    _rigidbody.linearVelocity = Vector2.zero; 
+                }
+            }
+        }
+        else
+        {
+            // Normal movement
+            _rigidbody.linearVelocity = _moveDirection * (moveSpeed * Time.fixedDeltaTime);        
         }
     }
 
-    public void SetMOveDirection(Vector2 direction)
+    public void SetMoveDirection(Vector2 direction)
     {
         _moveDirection = direction.normalized;
     }
@@ -38,22 +63,10 @@ public class EntityMover : MonoBehaviour
     {
         if (force > 0 && gameObject.activeInHierarchy)
         {
-            StartCoroutine(KnockbackRoutine(direction, force, duration));
+            _isKnockedBack = true;
+            _knockbackTimer = duration;
+            // Send the entity knocked back
+            _rigidbody.linearVelocity = direction * force;
         }
-    }
-
-    private IEnumerator KnockbackRoutine(Vector2 direction, float force, float duration)
-    {
-        _canMove = false;
-        
-        // Apply physical impulse
-        _rigidbody.linearVelocity = Vector2.zero;
-        _rigidbody.AddForce(direction * (force * _rigidbody.mass), ForceMode2D.Impulse);
-        
-        yield return new WaitForSeconds(duration);
-        
-        // Restore control
-        _rigidbody.linearVelocity = Vector2.zero;
-        _canMove = true;
     }
 }

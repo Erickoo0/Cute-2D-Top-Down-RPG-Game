@@ -50,6 +50,7 @@ MonoBehaviour:
   baseDamageData:
     damageAmount: 10
     hitDirection: {x: 0, y: 0}
-    knockbackForce: 0
+    knockbackForce: 20
+    knockbackDuration: 2
     type: 0
     source: {fileID: 0}
