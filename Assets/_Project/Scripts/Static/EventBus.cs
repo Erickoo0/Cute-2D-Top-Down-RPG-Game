@@ -3,6 +3,10 @@ using UnityEngine;
 
 public static class EventBus
 {
+    //-----------------------Time Events--------------------------
+    public static event EventHandler<TimeSpan> OnWorldTimeChanged;
+    public static void RequestUpdateWorldTime(object sender,TimeSpan time) => OnWorldTimeChanged?.Invoke(sender, time);
+    
     //-----------------------Dialogue Events--------------------------
     //Signals when a dialogue option is selected that has an action
     public static Action<string, object> OnDialogueEventRequested;
@@ -24,8 +28,6 @@ public static class EventBus
     
     public static event Action OnUpdateQuestRequested;
     public static void RequestUpdateQuest()=> OnUpdateQuestRequested?.Invoke();
-    
-    
     
     //--------------------------Combat Events-------------------------
     // Signals when a floating text gets requested
