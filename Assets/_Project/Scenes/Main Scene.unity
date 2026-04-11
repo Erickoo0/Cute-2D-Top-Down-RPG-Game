@@ -6710,8 +6710,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -189326295
-  m_SortingLayer: 5
+  m_SortingLayerID: -2028734109
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5419310489963565622, guid: 8199c143b032a2d4697278ec4c5d7888, type: 3}
@@ -6723,7 +6723,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!4 &976108714
 Transform:
   m_ObjectHideFlags: 0
@@ -23258,6 +23258,7 @@ GameObject:
   - component: {fileID: 1894244091}
   - component: {fileID: 1894244090}
   - component: {fileID: 1894244088}
+  - component: {fileID: 1894244103}
   - component: {fileID: 1894244093}
   - component: {fileID: 1894244094}
   - component: {fileID: 1894244097}
@@ -23265,7 +23266,6 @@ GameObject:
   - component: {fileID: 1894244099}
   - component: {fileID: 1894244101}
   - component: {fileID: 1894244102}
-  - component: {fileID: 1894244103}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -23358,7 +23358,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!4 &1894244087
 Transform:
   m_ObjectHideFlags: 0
@@ -23611,8 +23611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8a700780a5b4148b87370b797bbfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityMover
-  moveSpeed: 175
-  knockbackDecay: 12
+  moveSpeed: 5
+  knockbackDecay: 5
 --- !u!1 &1900063776
 GameObject:
   m_ObjectHideFlags: 0

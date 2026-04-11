@@ -5,8 +5,8 @@ using UnityEngine;
 public class EntityMover : MonoBehaviour
 {
     [Header("Movement Settings")] 
-    [SerializeField] private float moveSpeed = 175f;
-    [SerializeField] private float knockbackDecay = 12f;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float knockbackDecay = 5f;
     private bool _isKnockedBack = false;
     private float _knockbackTimer;
     
@@ -28,7 +28,8 @@ public class EntityMover : MonoBehaviour
         if (_isKnockedBack)
         {
             // When knocked back, actively apply friction to slow down speed
-            _rigidbody.linearVelocity = Vector2.Lerp(_rigidbody.linearVelocity, Vector2.zero, knockbackDecay * Time.fixedDeltaTime); 
+            _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+            _rigidbody.linearVelocity = Vector2.Lerp(_rigidbody.linearVelocity, Vector2.zero, knockbackDecay *  Time.fixedDeltaTime); 
             
             // Snap velocity when close to zero
             if (_rigidbody.linearVelocity.sqrMagnitude < 0.01f) 
@@ -49,8 +50,18 @@ public class EntityMover : MonoBehaviour
         }
         else
         {
-            // Normal movement
-            _rigidbody.linearVelocity = _moveDirection * (moveSpeed * Time.fixedDeltaTime);        
+            // If no movement input and not knockedback, lock their position to prevent being pushed around
+            if (_moveDirection == Vector2.zero)
+            {
+                _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
+            else
+            {
+                // Normal movement  (unlock position)
+                _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+                _rigidbody.linearVelocity = _moveDirection * moveSpeed;
+            }
         }
     }
 

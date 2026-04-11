@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 2729579692476846028}
   - component: {fileID: 7485716094007412697}
   - component: {fileID: 7406667262316240941}
+  - component: {fileID: 6185530980384113139}
   m_Layer: 3
   m_Name: NPC
   m_TagString: Untagged
@@ -133,7 +134,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!50 &3585913823327191534
 Rigidbody2D:
   serializedVersion: 5
@@ -144,9 +145,9 @@ Rigidbody2D:
   m_GameObject: {fileID: 1295489641667029861}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 100
+  m_Mass: 1
   m_LinearDamping: 5
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -383,8 +384,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8a700780a5b4148b87370b797bbfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityMover
-  moveSpeed: 100
-  knockbackDecay: 12
+  moveSpeed: 5
+  knockbackDecay: 5
+--- !u!114 &6185530980384113139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295489641667029861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37528c544f334944a9c5a60db6205526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Npc
+  dialogueName: 
+  dialoguePortrait: {fileID: 0}
+  dialogueStartNode: {fileID: 0}
+  shopList: []
 --- !u!1 &4838460603127964859
 GameObject:
   m_ObjectHideFlags: 0
