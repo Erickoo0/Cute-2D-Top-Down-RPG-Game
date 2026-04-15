@@ -23945,6 +23945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aa9210734d44da48c05b78f06ef819f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  entityID: Player
   dashInput: 0
   defaultDashTime: 10
 --- !u!114 &1894244106
@@ -26996,6 +26997,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mushroom
       objectReference: {fileID: 0}
+    - target: {fileID: 6651961568987034968, guid: 96e456628781c1b43bcb780d203d957a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6879630521950988497, guid: 96e456628781c1b43bcb780d203d957a, type: 3}
       propertyPath: m_SpriteHash
       value: 0
@@ -27006,11 +27011,11 @@ PrefabInstance:
       objectReference: {fileID: 7108339969198208228, guid: 23a3d95191a478f4f9ae796af762d2f2, type: 3}
     - target: {fileID: 7458652338936764388, guid: 96e456628781c1b43bcb780d203d957a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.17
+      value: 9.02
       objectReference: {fileID: 0}
     - target: {fileID: 7458652338936764388, guid: 96e456628781c1b43bcb780d203d957a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.79
+      value: -5.37
       objectReference: {fileID: 0}
     - target: {fileID: 7458652338936764388, guid: 96e456628781c1b43bcb780d203d957a, type: 3}
       propertyPath: m_LocalPosition.z

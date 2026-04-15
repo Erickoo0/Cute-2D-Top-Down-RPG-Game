@@ -19,13 +19,10 @@ public class EntityChaseState : State<EntityController>
         
         float distance = Vector2.Distance(currentPosition, targetPosition);
         
-        // If in attack range
-        if (distance <= context.actionRange)
+        // If in attack range and action cooldown is over, perform action
+        if (distance <= context.actionRange && context.CanPerformAction())
         {
-            //Stop moving!
-            context.EntityMover.SetMoveDirection(Vector2.zero);
-            
-            //stateMachine.ChangeState(context.AttackState);
+            stateMachine.ChangeState(context.ActionState);
         }
         else // Keep Chasing
         {

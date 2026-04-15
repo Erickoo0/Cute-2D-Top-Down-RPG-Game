@@ -8,11 +8,15 @@ public class EntityController : BaseEntityController
 {
     [Header("Mob Type & Targeting")] 
     public MobType mobType = MobType.Aggressive;
-    public float detectionRange = 5f;
+    public float detectionRange = 6f;
     public float detectionLostRange = 8f;
-    public float actionRange = 2f;
+    public float actionRange = 5f;
     public Transform currentTarget;
     public List<string> targetableList;
+
+    [Header("Action Settings")] 
+    public float actionCooldown = 2f;
+    private float _lastActionTime;
     
     [Header("Movement Data")]
     private Transform _waypointParent;
@@ -28,7 +32,7 @@ public class EntityController : BaseEntityController
     public EntityIdleState  IdleState { get; private set; }
     public EntityWanderState WanderState { get; private set; }
     public EntityChaseState ChaseState { get; private set; }
-    //public EntityActionState ActionState { get; private set; }
+    public EntityActionState ActionState { get; private set; }
     
     protected override void Awake()
     {
@@ -40,7 +44,7 @@ public class EntityController : BaseEntityController
         IdleState = new EntityIdleState(this, StateMachine);
         WanderState = new EntityWanderState(this, StateMachine);
         ChaseState = new EntityChaseState(this, StateMachine);
-        //ActionState = new EntityActionState(this, StateMachine);
+        ActionState = new EntityActionState(this, StateMachine);
         
         SetupWaypointsList();
     }
@@ -136,5 +140,17 @@ public class EntityController : BaseEntityController
         // Advance the waypoint
         if (loopWaypoints) currentWaypointIndex = (currentWaypointIndex + 1) % waypointsList.Length;
         else if (currentWaypointIndex < waypointsList.Length - 1) currentWaypointIndex++;
+    }
+    
+    // A helper method to check if we can act
+    public bool CanPerformAction() 
+    {
+        return Time.time >= _lastActionTime + actionCooldown;
+    }
+    
+    // A method to reset the timer (called when the action finishes)
+    public void ResetActionCooldown()
+    {
+        _lastActionTime = Time.time;
     }
 }
