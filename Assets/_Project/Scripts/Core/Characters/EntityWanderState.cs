@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 public class EntityWanderState : State<EntityController>
 {
     public EntityWanderState(EntityController context, StateMachine stateMachine) : base(context, stateMachine) { }

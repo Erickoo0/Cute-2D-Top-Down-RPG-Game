@@ -3,8 +3,13 @@ using UnityEngine.InputSystem;
 
 // A Data Hub that provides the API for states
 [RequireComponent(typeof(EntityMover), typeof(EntityAnimator), typeof(StateMachine))]
-public abstract class BaseEntityController : MonoBehaviour
+public abstract class BaseEntityController : MonoBehaviour, ITargetable
 {
+    [Header("ID")] 
+    [SerializeField] private string entityID;
+    public string GetTargetID() => entityID;
+    
+    
     [Header("References")]
     public StateMachine StateMachine { get; private set; }
     public EntityMover EntityMover { get; private set; }

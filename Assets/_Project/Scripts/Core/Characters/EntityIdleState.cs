@@ -17,7 +17,7 @@ public class EntityIdleState : State<EntityController>
     {
         if (context.IsTargetInRange())
         {
-            //stateMachine.ChangeState(context.ChaseState);
+            stateMachine.ChangeState(context.ChaseState);
         }
     }
     

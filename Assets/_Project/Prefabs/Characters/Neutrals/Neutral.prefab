@@ -404,11 +404,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3891c3e5f98f4d639b32e782089d8fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityController
-  aggroRange: 5
-  target: {fileID: 0}
+  mobType: 2
+  detectionRange: 5
+  detectionLostRange: 8
+  actionRange: 2
+  currentTarget: {fileID: 0}
+  targetableList:
+  - Player
   waypointsList: []
   currentWaypointIndex: 0
-  waypointWaitTime: 2
+  defaultWaypointWaitTime: 2
   loopWaypoints: 1
 --- !u!114 &-1747576445313389302
 MonoBehaviour:

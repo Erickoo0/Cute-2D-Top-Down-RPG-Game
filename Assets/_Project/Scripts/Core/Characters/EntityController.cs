@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public enum MobType { Passive, Neutral, Aggressive }
+
+
 public class EntityController : BaseEntityController
 {
-    [Header("AI Settings")] 
-    public float aggroRange = 5f;
-    public Transform target;
+    [Header("Mob Type & Targeting")] 
+    public MobType mobType = MobType.Aggressive;
+    public float detectionRange = 5f;
+    public float detectionLostRange = 8f;
+    public float actionRange = 2f;
+    public Transform currentTarget;
+    public List<string> targetableList;
     
     [Header("Movement Data")]
     private Transform _waypointParent;
@@ -14,16 +21,26 @@ public class EntityController : BaseEntityController
     public float defaultWaypointWaitTime = 2f;
     public bool loopWaypoints = true;
     
+    [Header("Components")]
+    //public EntityAction entityAction;
+    
     [Header("State References")]
     public EntityIdleState  IdleState { get; private set; }
     public EntityWanderState WanderState { get; private set; }
-
+    public EntityChaseState ChaseState { get; private set; }
+    //public EntityActionState ActionState { get; private set; }
+    
     protected override void Awake()
     {
         base.Awake();
 
+        // Grab the action component if we forgot to assign it
+        //if (entityAction == null) entityAction = GetComponent<EntityAction>();
+        
         IdleState = new EntityIdleState(this, StateMachine);
         WanderState = new EntityWanderState(this, StateMachine);
+        ChaseState = new EntityChaseState(this, StateMachine);
+        //ActionState = new EntityActionState(this, StateMachine);
         
         SetupWaypointsList();
     }
@@ -34,13 +51,48 @@ public class EntityController : BaseEntityController
         StateMachine.SetupState(WanderState);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if (currentTarget == null) FindTarget();
+        else if (currentTarget != null) CheckLoseTarget();
+    }
+
+    private void FindTarget()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
+
+        // Check all collided instances if they are targetable
+        foreach (Collider2D hit in hits)
+        {
+            ITargetable targetInterface = hit.GetComponentInParent<ITargetable>();
+
+            // Check if the targetable instance matches targetableList
+            if (targetInterface != null && targetableList.Contains(targetInterface.GetTargetID()))
+            {
+                // Assign the target
+                currentTarget = hit.transform; 
+                StateMachine.ChangeState(ChaseState);
+                return;
+            }
+        }
+    }
+    
+    private void CheckLoseTarget()
+    {
+        if (Vector2.Distance(transform.position, currentTarget.position) > detectionLostRange)
+        {
+            currentTarget = null;
+            StateMachine.ChangeState(WanderState);
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
         
-        if (target == null) target = other.transform;
-        
-        Vector2 lookDirection = (target.transform.position - transform.position).normalized;    
+        Vector2 lookDirection = (other.transform.position - transform.position).normalized;    
         EntityAnimator.FaceDirection(lookDirection);
         
         // If wandering, force idle state
@@ -50,8 +102,8 @@ public class EntityController : BaseEntityController
     //---- Helper Methods ----
     public bool IsTargetInRange()
     {
-        if (target == null) return false;
-        else return Vector2.Distance(transform.position, target.position) <= aggroRange;
+        if (currentTarget == null) return false;
+        else return Vector2.Distance(transform.position, currentTarget.transform.position) <= detectionRange;
     }
 
     private void SetupWaypointsList()
