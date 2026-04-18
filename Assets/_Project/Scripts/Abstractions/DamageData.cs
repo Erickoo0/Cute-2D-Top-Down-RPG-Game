@@ -18,6 +18,7 @@ public struct DamageData
     public Vector2 hitDirection;
     public float knockbackForce;
     public float knockbackDuration;
+    public float knockbackHeight;
     public DamageType type;
     public GameObject source;
     

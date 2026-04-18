@@ -6,31 +6,37 @@ public class HitBoxCircle : HitBox
 
     public override bool CheckForHits(DamageData data)
     {
+        if (!enableHitbox) return false;
+        
         // Check collisions in a circle and asign to an array
         bool hitSucess = false;
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius, victimLayer);
-        Debug.Log("Hit Check Started");
 
         // For every collision in the array, damage them
         foreach (Collider2D hit in hits)
         {
+            // Skip self
             if (hit.gameObject == data.source) continue;
         
             // 1. Calculate a direction for knockback
             Vector2 targetPosition = hit.transform.position;
             Vector2 attackPosition = transform.position;
-            Vector2 knockbackDirection = (targetPosition - attackPosition).normalized;
-            // If the explosion is exactly on top of the enemy, knock them "up" or "away" by default
-            if (knockbackDirection == Vector2.zero)
-            {
-                knockbackDirection = Vector2.up;
-            }
+            Vector2 primaryKnockbackDirection = (targetPosition - attackPosition).normalized;
+            
+            // 2. Calculate perpendicular offset
+            Vector2 perpendicularDirection = new Vector2(-primaryKnockbackDirection.y, primaryKnockbackDirection.x); 
+            
+            // 3. Determine the Side
+            float sideSign = (primaryKnockbackDirection.x * perpendicularDirection.y - primaryKnockbackDirection.y * perpendicularDirection.x) > 0 ? 1f : -1f;   
 
-            // 2. Create a copy of passed in damage data and modify the direction
+            // 4. Pass the direction
+            Vector2 finalDirection = (primaryKnockbackDirection + (perpendicularDirection * (sideSign * knockbackOffsetStrength))).normalized;
+            
+            // 5. Create a copy of passed in damage data and direction
             DamageData finalData = data;
-            finalData.hitDirection = knockbackDirection;
+            finalData.hitDirection = finalDirection;
 
-            // 3. send the damage data
+            // 6. send the damage data
             if (SendDamage(finalData, hit))
             {
                 hitSucess = true;

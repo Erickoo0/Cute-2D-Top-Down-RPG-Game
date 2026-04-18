@@ -6,16 +6,24 @@ public class EntityMover : MonoBehaviour
 {
     [Header("Movement Settings")] 
     public float moveSpeed = 5f;
-    [SerializeField] private float knockbackDecay = 5f;
+    
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackDecay = 8f;
     private bool _isKnockedBack = false;
     private float _knockbackTimer;
     
     private Rigidbody2D _rigidbody;
     private Vector2 _moveDirection;
+    private Collider2D _collider;
     
     public Vector2 MoveDirection => _moveDirection;
-    
-    private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
+    public bool IsKnockedBack => _isKnockedBack;
+
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<Collider2D>();
+    }
 
     private void FixedUpdate()
     {
@@ -27,41 +35,11 @@ public class EntityMover : MonoBehaviour
 
         if (_isKnockedBack)
         {
-            // When knocked back, actively apply friction to slow down speed
-            _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            _rigidbody.linearVelocity = Vector2.Lerp(_rigidbody.linearVelocity, Vector2.zero, knockbackDecay *  Time.fixedDeltaTime); 
-            
-            // Snap velocity when close to zero
-            if (_rigidbody.linearVelocity.sqrMagnitude < 0.01f) 
-            {
-                _rigidbody.linearVelocity = Vector2.zero;
-                _isKnockedBack = false; // Give control back immediately!
-            }
-            else
-            {
-                // Fallback Timer (in case they are pushed against a treadmill or moving platform)
-                _knockbackTimer -= Time.fixedDeltaTime;
-                if (_knockbackTimer <= 0f)
-                {
-                    _isKnockedBack = false;
-                    _rigidbody.linearVelocity = Vector2.zero; 
-                }
-            }
+            HandleKnockbackLoop();
         }
         else
         {
-            // If no movement input and not knockedback, lock their position to prevent being pushed around
-            if (_moveDirection == Vector2.zero)
-            {
-                _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-                _rigidbody.linearVelocity = Vector2.zero;
-            }
-            else
-            {
-                // Normal movement  (unlock position)
-                _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-                _rigidbody.linearVelocity = _moveDirection * moveSpeed;
-            }
+            HandleNormalMovement();
         }
     }
 
@@ -70,14 +48,51 @@ public class EntityMover : MonoBehaviour
         _moveDirection = direction.normalized;
     }
 
-    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    private void HandleKnockbackLoop()
     {
-        if (force > 0 && gameObject.activeInHierarchy)
+        // Knockback decay formula
+        _rigidbody.linearVelocity = Vector2.MoveTowards(_rigidbody.linearVelocity, Vector2.zero, knockbackDecay * Time.fixedDeltaTime * 10f);
+        
+        _knockbackTimer -= Time.fixedDeltaTime;
+        
+        // Snap to finish
+        if (_knockbackTimer <= 0f || _rigidbody.linearVelocity.sqrMagnitude < 0.1f)
         {
-            _isKnockedBack = true;
-            _knockbackTimer = duration;
-            // Send the entity knocked back
-            _rigidbody.linearVelocity = direction * force;
+            _isKnockedBack = false;
+            _rigidbody.linearVelocity = Vector2.zero;
+        }
+    }
+
+    private void HandleNormalMovement()
+    {
+        _rigidbody.linearVelocity = _moveDirection * moveSpeed;
+    }
+    
+
+    public void ApplyKnockback(Vector2 direction, float force, float duration, GameObject source = null)
+    {
+        if (!gameObject.activeInHierarchy) return;
+
+        _isKnockedBack = true;
+        _knockbackTimer = duration;
+        
+        // Immediate velocity burst
+        _rigidbody.linearVelocity = direction * force;
+
+        // Temporarily ignore collision with the attacker
+        if (source != null)
+        {
+            StartCoroutine(TemporaryIgnoreCollision(source, duration * 1.5f));
+        }
+    }
+    
+    private IEnumerator TemporaryIgnoreCollision(GameObject source, float duration)
+    {
+        if (source.TryGetComponent<Collider2D>(out Collider2D sourceCol) && _collider != null)
+        {
+            Physics2D.IgnoreCollision(_collider, sourceCol, true);
+            yield return new WaitForSeconds(duration);
+            Physics2D.IgnoreCollision(_collider, sourceCol, false);
         }
     }
 }

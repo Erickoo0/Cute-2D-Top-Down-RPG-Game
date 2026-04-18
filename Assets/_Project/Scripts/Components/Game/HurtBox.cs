@@ -21,7 +21,7 @@ public class HurtBox : MonoBehaviour, IDamagable
         
         if (TryGetComponent<EntityMover>(out EntityMover entityMover))
         {
-            entityMover.ApplyKnockback(data.hitDirection, data.knockbackForce, data.knockbackDuration);
+            entityMover.ApplyKnockback(data.hitDirection, data.knockbackForce, data.knockbackDuration, data.source);
         }
     }
 }
