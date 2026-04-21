@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class EntityWanderState : State<EntityController>
+public class EntityWanderState : BaseWanderState
 {
     public override void Enter() { }
 

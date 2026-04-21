@@ -236,7 +236,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7531220670705793847}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -425,8 +425,8 @@ MonoBehaviour:
     rid: 7572515169101152257
   ChaseState:
     rid: 7572515169101152258
-  ChargeState:
-    rid: 7572515169101152259
+  AttackState:
+    rid: 7572515179751800910
   references:
     version: 2
     RefIds:
@@ -439,8 +439,8 @@ MonoBehaviour:
     - rid: 7572515169101152258
       type: {class: EntityChaseState, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 7572515169101152259
-      type: {class: EntityChargeState, ns: , asm: Assembly-CSharp}
+    - rid: 7572515179751800910
+      type: {class: EntityChargeAttackState, ns: , asm: Assembly-CSharp}
       data: 
 --- !u!114 &-1747576445313389302
 MonoBehaviour:

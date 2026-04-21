@@ -49,7 +49,6 @@ GameObject:
   - component: {fileID: 1154732131269866783}
   - component: {fileID: 3264141129822851798}
   - component: {fileID: 5775654112022256840}
-  - component: {fileID: 2729579692476846028}
   - component: {fileID: 7485716094007412697}
   - component: {fileID: 7406667262316240941}
   - component: {fileID: 6185530980384113139}
@@ -143,7 +142,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1295489641667029861}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -336,21 +335,6 @@ MonoBehaviour:
   m_labelHash: 1.3971405e-28
   m_SpriteKey: 0
   m_SpriteHash: 163368403
---- !u!114 &2729579692476846028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295489641667029861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 012bfd76677043b4aad64da3b8d42c29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WaypointMover
-  waitTime: 2
-  maxStartDelay: 4
-  loopWaypoints: 1
 --- !u!114 &7485716094007412697
 MonoBehaviour:
   m_ObjectHideFlags: 0

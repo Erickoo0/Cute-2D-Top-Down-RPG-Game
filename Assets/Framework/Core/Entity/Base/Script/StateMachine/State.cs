@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
+public enum StateType { Idle, Wander, Chase, Action }
+
 [System.Serializable]
 public abstract class State
 {
     protected StateMachine stateMachine; // Reference to the state machine
-
+    
     // Contracts that each state must fulfill
     public virtual void Enter(){}
     public virtual void Update(){}

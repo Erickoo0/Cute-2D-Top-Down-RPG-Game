@@ -11,13 +11,13 @@ public class EntityController : BaseEntityController
     [Header("Mob Type & Targeting")] 
     [field: SerializeField] public MobType mobType { get; private set; }  = MobType.Aggressive;
     [field: SerializeField] public float DetectionRange { get; private set; } = 6f;
-    [field: SerializeField] public float DetectionLostRange { get; private set; } = 8f;
+    [field: SerializeField] public float DetectionLostRange { get; private set; } = 10f;
     [field: SerializeField] public float ActionRange { get; private set; } = 5f;
     [field: SerializeField] public List<string> TargetableList { get; private set; }
     public Transform currentTarget ;
     
     [Header("Action Settings")] 
-    [field: SerializeField] public float ActionCooldown  { get; private set; } = 2f;
+    [field: SerializeField] public float ActionCooldown  { get; private set; } = 1f;
     private float _lastActionTime;
 
     
@@ -29,10 +29,10 @@ public class EntityController : BaseEntityController
     public int currentWaypointIndex = 0;
     
     [Header("State References")]
-    [SerializeReference, SubclassSelector] public State<EntityController> IdleState;
-    [SerializeReference, SubclassSelector] public State<EntityController> WanderState;
-    [SerializeReference, SubclassSelector] public State<EntityController> ChaseState;
-    [SerializeReference, SubclassSelector] public State<EntityController> ChargeState;
+    [SerializeReference, SubclassSelector] public BaseIdleState IdleState;
+    [SerializeReference, SubclassSelector] public BaseWanderState WanderState;
+    [SerializeReference, SubclassSelector] public BaseChaseState ChaseState;
+    [SerializeReference, SubclassSelector] public BaseActionState AttackState;
     
     protected override void Awake()
     {
@@ -41,7 +41,8 @@ public class EntityController : BaseEntityController
         IdleState?.Setup(this, StateMachine);
         WanderState?.Setup(this, StateMachine);
         ChaseState?.Setup(this, StateMachine);
-        ChargeState?.Setup(this, StateMachine);
+        AttackState?.Setup(this, StateMachine);
+        
         SetupWaypointsList();
     }
 
@@ -56,6 +57,7 @@ public class EntityController : BaseEntityController
         base.Update();
 
         UpdateTargeting();
+        //Debug.Log($"Current State: {StateMachine.CurrentState}");
     }
 
     //---- Targeting Methods ----
@@ -102,7 +104,7 @@ public class EntityController : BaseEntityController
     {
         if (!other.CompareTag("Player")) return;
 
-        if (StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != ChargeState)
+        if (StateMachine.CurrentState != ChaseState && StateMachine.CurrentState != AttackState)
         {
             Vector2 lookDirection = (other.transform.position - transform.position).normalized;    
             EntityAnimator.FaceDirection(lookDirection);
@@ -140,7 +142,11 @@ public class EntityController : BaseEntityController
     public Vector2 GetCurrentWaypointPosition()
     {
         // If no waypoints, stand still
-        if (waypointsList == null || waypointsList.Length <= 0) return transform.position;
+        if (waypointsList == null || waypointsList.Length <= 0)
+        {
+            Debug.Log("No waypoint List found");
+            return transform.position;
+        }
         // Return waypoint position
         return waypointsList[currentWaypointIndex];
     }
@@ -148,7 +154,11 @@ public class EntityController : BaseEntityController
     public void AdvanceToNextWaypoint()
     {
         // Safety check
-        if (waypointsList == null || waypointsList.Length <= 0) return;
+        if (waypointsList == null || waypointsList.Length <= 0)
+        {
+            Debug.Log("No waypoint List found");
+            return;
+        }
         
         // Advance the waypoint
         if (LoopWaypoints) currentWaypointIndex = (currentWaypointIndex + 1) % waypointsList.Length;

@@ -23943,6 +23943,29 @@ MonoBehaviour:
   entityID: Player
   dashInput: 0
   defaultDashTime: 10
+  IdleState:
+    rid: 7572515169101152336
+  MoveState:
+    rid: 7572515169101152337
+  DashState:
+    rid: 7572515169101152338
+  MouseAttackState:
+    rid: 7572515169101152339
+  references:
+    version: 2
+    RefIds:
+    - rid: 7572515169101152336
+      type: {class: PlayerIdleState, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 7572515169101152337
+      type: {class: PlayerMoveState, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 7572515169101152338
+      type: {class: PlayerDashState, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 7572515169101152339
+      type: {class: PlayerMouseAttackState, ns: , asm: Assembly-CSharp}
+      data: 
 --- !u!114 &1894244106
 MonoBehaviour:
   m_ObjectHideFlags: 0

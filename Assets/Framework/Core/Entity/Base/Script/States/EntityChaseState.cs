@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class EntityChaseState : State<EntityController>
+public class EntityChaseState : BaseChaseState
 {
     public override void Enter() { }
 
@@ -15,12 +15,16 @@ public class EntityChaseState : State<EntityController>
         // If in action range and action cooldown is over, switch to the action state
         if (distance <= controller.ActionRange && controller.CheckActionCooldown())
         {
-            stateMachine.ChangeState(controller.ChargeState);
+            stateMachine.ChangeState(controller.AttackState);
         }
-        else // Keep Chasing
+        else if (distance > 3f) // Keep Chasing up to certain distance
         {
             Vector2 moveDirection = (targetPosition - currentPosition).normalized;
             controller.EntityMover.SetMoveDirection(moveDirection);
+        }
+        else
+        {
+            controller.EntityMover.SetMoveDirection(Vector2.zero);
         }
     }
     

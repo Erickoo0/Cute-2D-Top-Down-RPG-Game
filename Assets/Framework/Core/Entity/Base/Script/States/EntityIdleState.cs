@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class EntityIdleState : State<EntityController>
+public class EntityIdleState : BaseIdleState
 {
     private float _idleTime;
     
@@ -9,11 +9,12 @@ public class EntityIdleState : State<EntityController>
     public override void Enter()
     {
         controller.EntityMover.SetMoveDirection(Vector2.zero); 
-        _idleTime = Random.Range(100f, 300f);
+        _idleTime = Random.Range(0.5f, 1.5f);
     }
 
     public override void Update()
     {
+        Debug.unityLogger.Log("idle time: " + _idleTime);
         if (_idleTime > 0) _idleTime -= Time.deltaTime;
         else stateMachine.ChangeState(controller.WanderState);
     }
@@ -21,6 +22,9 @@ public class EntityIdleState : State<EntityController>
     public override void PhysicsUpdate() { }
     
     public override void HandleInput() { }
-    
-    public override void Exit() { }
+
+    public override void Exit()
+    {
+        controller.EntityMover.SetMoveDirection(Vector2.zero);
+    }
 }

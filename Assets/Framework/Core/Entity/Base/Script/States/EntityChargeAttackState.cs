@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class EntityChargeState : State<EntityController>
+public class EntityChargeAttackState : BaseActionState
 {
     private ChargeAttackData _attackData;
     private HitBox _spawnedHitbox;
@@ -29,8 +29,6 @@ public class EntityChargeState : State<EntityController>
         _isFinished = false;
         _hasHitThisExecute = false;
         _originalSpeed = controller.EntityMover.moveSpeed;
-        _chargeTimer = 0f;
-        _windUpTimer = _attackData.windUpDuration;
         
         // 2. Freeze and set timers
         controller.EntityMover.SetMoveDirection(Vector2.zero);
@@ -39,17 +37,17 @@ public class EntityChargeState : State<EntityController>
         // 3. Target Validation & Direction Logic
         if (controller.currentTarget != null)
         {
-            Vector2 direction = (Vector2)controller.currentTarget.position - (Vector2)controller.transform.position;
+            Vector2 direction = controller.currentTarget.position - controller.transform.position;
             _chargeDirection = direction.normalized;
 
             // Calculate charge duration based on distance to target + overshoot constant
             float totalDistance = direction.magnitude + _attackData.overshootDistance;
-            float speed = _originalSpeed * _attackData.chargeSpeedMultiplier;
-            _chargeTimer = totalDistance / speed;
+            float totalChargeSpeed = _originalSpeed * _attackData.chargeSpeedMultiplier;
+            _chargeTimer = totalDistance / totalChargeSpeed;
             
             controller.EntityAnimator.FaceDirection(_chargeDirection);
         }
-        else
+        else // If there is no target anymore
         {
             _isFinished = true; // Bail if target is lost before starting
             return;
@@ -66,12 +64,13 @@ public class EntityChargeState : State<EntityController>
             if (_spawnedHitbox is HitBoxCircle circleHitbox) 
             { 
                 circleHitbox.radius = _attackData.hitboxRadius; 
-            } 
+            }
         }
     }
 
     public override void Update()
     {
+        // If attack is finished, return to idle
         if (_isFinished)
         {
             stateMachine.ChangeState(controller.IdleState);
@@ -108,7 +107,6 @@ public class EntityChargeState : State<EntityController>
         // Ensure the hitbox follows any specific offset defined in the data
         _spawnedHitbox.transform.localPosition = _attackData.hitboxOffset;
         _spawnedHitbox.enableHitbox = true;
-        Debug.Log("Hitbox enabled");
 
         // Check if we can still hit (Handles 'Hit Once' logic)
         if (!_attackData.hitOncePerExecute || !_hasHitThisExecute)
@@ -120,16 +118,16 @@ public class EntityChargeState : State<EntityController>
             if (_spawnedHitbox.CheckForHits(frameDamage))
             {
                 _hasHitThisExecute = true;
-                Debug.Log("Hit!");
-                // Add impact freeze or camera shake triggers here if desired
+                // Add impact freeze or camera shake triggers here in the future
             }
         }
     }
 
     public override void Exit()
     {
-        // 1. Restore original movement speed
+        // 1. Restore original movement speed and reset target
         controller.EntityMover.moveSpeed = _originalSpeed;
+        controller.currentTarget = null;
         controller.EntityMover.SetMoveDirection(Vector2.zero);
         
         // 2. Start the cooldown timer on the controller
