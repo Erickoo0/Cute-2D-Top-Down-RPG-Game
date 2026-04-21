@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8fee3171fc7414a9be8974a3bbdd4c, type: 3}
+  m_Name: ChargeAttackData
+  m_EditorClassIdentifier: Assembly-CSharp::ChargeAttackData
+  hitboxPrefab: {fileID: 2873761913983823598, guid: ebda2ed39dab96546955db76e4086f77, type: 3}
+  damageData:
+    damageAmount: 10
+    hitDirection: {x: 0, y: 0}
+    knockbackForce: 25
+    knockbackDuration: 3
+    knockbackHeight: 5
+    type: 0
+    source: {fileID: 0}
+  hitboxRadius: 1.5
+  hitboxOffset: {x: 0, y: 0}
+  hitOncePerExecute: 1
+  windUpDuration: 0.75
+  chargeSpeedMultiplier: 4
+  overshootDistance: 5
