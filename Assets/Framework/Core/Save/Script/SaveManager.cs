@@ -13,7 +13,6 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance { get; private set; }
     
     private string _savePath;
-    private readonly List<ISaveable> _saveables = new List<ISaveable>();
 
     private void Awake()
     {
@@ -51,17 +50,23 @@ public class SaveManager : MonoBehaviour
     }
     
     //---- File Load & Save Logic----
-    public void NewGame()
+    private void NewGame()
     {
-        Debug.Log("Starting New Game");
         // 1. Delete previous save data
         if (File.Exists(_savePath)) File.Delete(_savePath);
+        
         // 2. Create a new save data
         SaveData newSaveData = new SaveData();
+        
         // 3. Import new save data into all ISaveables
-        foreach (ISaveable saveable in _saveables) saveable.LoadFromSaveData(newSaveData);
+        var allSaveables = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<ISaveable>();
+        foreach (ISaveable saveable in allSaveables) saveable.LoadFromSaveData(newSaveData);
+        
         // 4. Save the new game file
         SaveGame();
+        
+        Debug.Log("Starting New Game");
+
  
     }
     

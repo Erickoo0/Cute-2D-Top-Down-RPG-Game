@@ -162,7 +162,7 @@ public class DialogueManager : MonoBehaviour
         // 1. Execut the options event if it has one
         if (!string.IsNullOrEmpty(selectedOption.dialogueEvent))
         {
-            HandleDialogueEvents(selectedOption.dialogueEvent, selectedOption.eventData);
+            HandleDialogueEvents(selectedOption.dialogueEvent, selectedOption.eventParameter);
         }
         // 2. Advance to the next node if it has one
         if (selectedOption.nextNode != null) 
@@ -177,7 +177,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private void HandleDialogueEvents(string eventName, Object eventData = null)
+    private void HandleDialogueEvents(string eventName, string eventParameter = null)
     {
         if (string.IsNullOrEmpty(eventName)) return;
 
@@ -188,7 +188,7 @@ public class DialogueManager : MonoBehaviour
                 break;
             
             case "AcceptQuest":
-                EventBus.RequestDialogueEvent(eventName, eventData);
+                EventBus.RequestDialogueEvent(eventName, eventParameter);
                 break;
         }
     }

@@ -25352,6 +25352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Quest.QuestManager
   questUI: {fileID: 2015281687}
+  questDatabase:
+  - {fileID: 11400000, guid: 2f14e6d385abc374f9d7234f9bff7811, type: 2}
+  - {fileID: 11400000, guid: 36fbb57dd37cd6241a5572ea2a24118c, type: 2}
 --- !u!114 &2015281687
 MonoBehaviour:
   m_ObjectHideFlags: 0

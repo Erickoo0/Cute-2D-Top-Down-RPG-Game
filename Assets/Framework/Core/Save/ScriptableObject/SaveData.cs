@@ -24,6 +24,10 @@ public class SaveData
     
     //----Environment Variables----
     public List<string> openedChests = new List<string>();
+    
+    //----Quest Variables----
+    public List<SavedQuest> savedQuests = new List<SavedQuest>();
+
 }
 
 /// <summary>
@@ -35,4 +39,15 @@ public struct SavedSlot
     public int index; // Which Slot Index?
     public string itemID; 
     public int itemStackSize;
+}
+
+/// <summary>
+/// Holds the information of one Quest
+/// </summary>
+[System.Serializable]
+public struct SavedQuest
+{
+    public string questID;
+    public int[] objectiveProgress;
+    public bool isCompleted;
 }
