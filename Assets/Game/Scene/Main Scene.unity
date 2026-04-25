@@ -7320,7 +7320,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8013536630858375123, guid: 820087c97e3fc6b43bb84b124a1211fe, type: 3}
       propertyPath: m_Name
-      value: DestructibleChest Variant (1)
+      value: DestructibleChest Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8695322914069330968, guid: 820087c97e3fc6b43bb84b124a1211fe, type: 3}
+      propertyPath: id
+      value: 87b29ec4-d32b-4382-b9ab-09e9f4918e3b
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22538,6 +22542,10 @@ PrefabInstance:
     - target: {fileID: 8013536630858375123, guid: 820087c97e3fc6b43bb84b124a1211fe, type: 3}
       propertyPath: m_Name
       value: DestructibleChest Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8695322914069330968, guid: 820087c97e3fc6b43bb84b124a1211fe, type: 3}
+      propertyPath: id
+      value: 914b31ed-f2b9-4905-9b88-b385b26c8275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

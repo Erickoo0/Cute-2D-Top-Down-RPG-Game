@@ -9,16 +9,21 @@ public class SaveData
 {
     //----Player Variables----
     public Vector3 playerPosition;
-    public int currentHealth;
-    public int maxHealth;
-    public int currentMana;
-    public int maxMana;
+    public float maxHealth;
+    public float currentHealth;
+    public float maxMana;
+    public float currentMana;
+    public int currentLevel;
+    public int currentExperience;
     
-    //----Area Variables----
-    public string mapBoundaryName; //Stores Boundary Name
+    //----Location Variables----
+    public string currentLocation;
     
     //----Inventory Vairables----
     public List<SavedSlot> savedSlotList = new List<SavedSlot>();
+    
+    //----Environment Variables----
+    public List<string> openedChests = new List<string>();
 }
 
 /// <summary>
