@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
     // References
     private DialogueUI _dialogueUI;
     private DialogueOptionController _dialogueOptionController;
+    private PlayerController _playerController;
     
     private Npc _currentSpeaker;
     private DialogueNode _currentNode;
@@ -51,8 +52,12 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue(Npc speaker)
+    public void StartDialogue(Npc speaker, PlayerController playerController)
     {
+        // Stop player from moving
+        _playerController = playerController;
+        _playerController.SetCanMove(false);
+        
         // Guard Clause
         if (_dialogueUI.IsVisible) return;
         
@@ -130,7 +135,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     // Callback Function passed to the Buttons (activates on button click)
-    public void OnOptionSelected(DialogueOption selectedOption)
+    private void OnOptionSelected(DialogueOption selectedOption)
     {
         // Tell the Option Controller to delete the options
         _isWaitingChoice = false;
@@ -176,5 +181,6 @@ public class DialogueManager : MonoBehaviour
         _currentNode = null;
         
         EventBus.RequestCloseMenu(_dialogueUI.DialoguePanel);      
+        _playerController.SetCanMove(true);
     }
 }

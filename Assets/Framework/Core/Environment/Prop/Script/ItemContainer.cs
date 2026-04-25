@@ -45,12 +45,13 @@ public class ItemContainer : MonoBehaviour, IInteractable
     }
 
     public bool CanInteract() => !IsOpened;
-    
-    public void Interact()
+
+    public void Interact(PlayerController playerController = null)
     {
         if (CanInteract())
             OpenContainer();
     }
+
 
     public void OpenContainer()
     {
