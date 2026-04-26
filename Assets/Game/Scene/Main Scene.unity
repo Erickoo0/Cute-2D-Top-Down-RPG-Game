@@ -7230,8 +7230,9 @@ GameObject:
   m_Component:
   - component: {fileID: 986300772}
   - component: {fileID: 986300773}
+  - component: {fileID: 986300774}
   m_Layer: 0
-  m_Name: Floating Text Manager
+  m_Name: Visual Effects Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7270,6 +7271,20 @@ MonoBehaviour:
   xOffset: 0
   randomYRange: 0.2
   randomXRange: 0.5
+--- !u!114 &986300774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986300771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20762eaf89437ac4d84ae4ece7901bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AfterImageManager
+  afterImagePrefab: {fileID: 1983376687121329494, guid: 57031c072d53eb9498fae5a2e87a5bfb, type: 3}
+  poolSize: 10
 --- !u!1 &1003934884
 GameObject:
   m_ObjectHideFlags: 0
@@ -22299,7 +22314,6 @@ RectTransform:
   - {fileID: 1430858748}
   - {fileID: 803550104}
   - {fileID: 1173917547}
-  - {fileID: 490002321}
   - {fileID: 1522273577}
   - {fileID: 1489805338}
   - {fileID: 546063923}
@@ -22309,6 +22323,7 @@ RectTransform:
   - {fileID: 575724266}
   - {fileID: 67165792}
   - {fileID: 2101744722}
+  - {fileID: 490002321}
   - {fileID: 530189236}
   m_Father: {fileID: 1598360438}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24170,7 +24185,6 @@ GameObject:
   - component: {fileID: 1894244104}
   - component: {fileID: 1894244090}
   - component: {fileID: 1894244103}
-  - component: {fileID: 1894244093}
   - component: {fileID: 1894244094}
   - component: {fileID: 1894244097}
   - component: {fileID: 1894244100}
@@ -24370,18 +24384,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.6736898, y: 0.43915495}
   m_EdgeRadius: 0
---- !u!114 &1894244093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894244084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31e527e2e92e6a14ba3863300117b43d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistance
 --- !u!114 &1894244094
 MonoBehaviour:
   m_ObjectHideFlags: 0
