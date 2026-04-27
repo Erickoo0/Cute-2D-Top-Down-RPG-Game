@@ -1,93 +1,101 @@
-# Inventory System Technical Deep Dive
+# 🛠 System: Inventory System
 
-A modular inventory system built in **Unity / C#** with a focus on **clean architecture**, **event-driven updates**, and **extensibility**.
+## 📝 Overview
 
----
+The **Inventory System** manages how the player stores, stacks, removes, drops, saves, loads, and displays items.
 
-## Overview
+The system is built around a clear separation between data and UI. `InventoryManager` owns the actual inventory data through an array of `ItemInstance` slots, while `InventoryUI` and `InventorySlotUI` handle the visual representation. This allows inventory logic to update independently from the interface, while UI elements simply listen for changes and refresh when needed.
 
-The inventory is built around a **single source of truth**: `InventoryManager`.
-
-Key design ideas:
-- **`ItemData`** defines static item info using `ScriptableObject`
-- **`ItemInstance`** stores runtime item state such as stack count
-- **`InventoryManager`** owns all inventory contents and logic
-- **UI updates react to events** instead of polling every frame
-- **The hotbar is the first section of the inventory**
-- **Save/load uses item IDs**, not direct object references
-
-This keeps the system easy to reason about while leaving room for future features.
+The system currently supports stackable items, hotbar slots, active slot selection, drag/drop-friendly slot interfaces, item dropping into the world, and JSON-friendly save/load reconstruction using item IDs from the `ItemDatabase`.
 
 ---
 
-## Data Model and Item Flow
+## 🛑 The Challenge (The "Problem")
 
-The inventory separates **static item data** from **dynamic item data**:
+A common beginner approach is to let UI slots store the actual items directly. This seems simple at first, but creates problems when saving, loading, dropping items, or changing the UI layout.
 
-- **`ItemData`** is the shared blueprint for an item type  
-  Includes ID, icon, name, description, prefab reference, and booleans
-
-- **`ItemInstance`** is the live item stack
-  Holds a reference to `ItemData` and holds dynamic information like durability, or stack size
-
-This avoids duplicating static data across slots and creates a flexible base for future per-item properties.
-
-The same model is also used across the full item lifecycle:
-- **world pickups** are represented by `ItemObject`
-- **inventory slots** store `ItemInstance`
-- **save data** stores item ID, slot index, and stack size
-- **loaded items** are rebuilt through `ItemDatabase`
-
-Using IDs for persistence keeps save data lightweight and avoids relying on direct scene or prefab references.
+- **Complexity:** If the item data lives inside UI buttons or images, the inventory becomes tied to the current menu layout instead of being a real data system.
+- **Dependencies:** The inventory data should not depend on UI objects, and UI slots should not be responsible for deciding how items stack, save, or drop into the world.
+- **Scalability:** Adding hotbars, chests, equipment slots, drag-and-drop, or save/load would become much harder if every UI slot managed its own item behavior independently.
 
 ---
 
-## Inventory, Hotbar, and Equipment
+## 🏗 The Architecture (The "Solution")
 
-`InventoryManager` stores the inventory as a fixed-size array of `ItemInstance` and handles:
-- adding and stacking items
-- removing items
-- swapping slots
-- dropping items
-- notifying other systems when data changes
+The system separates inventory responsibilities into focused layers:
 
-The hotbar is not a separate inventory. It is simply the **first section of the same slot array**.
+* **`InventoryManager`**: The source of truth for inventory data. It owns the `ItemInstance[]` array, handles stacking, removing, swapping, dropping, active slot changes, and save/load logic.
+* **`InventoryUI`**: Builds the visual inventory and hotbar slots, subscribes to inventory events, and refreshes only the slots that changed.
+* **`InventorySlotUI`**: Displays a single slot by reading from `InventoryManager`, showing item name, icon, stack size, and animated icons when needed.
+* **`IStorageSlot`**: Provides a shared interface for storage slot UI behavior, making the system easier to expand for drag-and-drop or other storage types.
 
-This keeps the architecture simpler by avoiding duplicated logic between inventory and hotbar systems.
+### 🧩 Patterns & Principles Used:
 
-`HotbarManager` listens for Hotbar related input and handles active item selection , while `PlayerEquipment` listens for active slot changes and spawns the selected item prefab as the equipped object. If that object implements `IUsable`, it can perform item-specific behavior when used.
-
-This keeps item usage **component-driven** and avoids hardcoding item behavior into the inventory manager.
-
----
-
-## UI and Event-Driven Updates
-
-The UI is built as a **reactive presentation layer**.
-
-`InventoryUI` creates the slot UI and listens for inventory events. Each slot:
-- knows its index
-- reads data directly from `InventoryManager`
-- refreshes only when its slot changes through events sent from `InventoryManager`
-
-This event-driven approach improves:
-- separation of concerns
-- decoupling between gameplay and UI
-- maintainability as the system grows
-
-Rather than treating the UI as a second owner of inventory data, it stays synchronized by responding to changes from the manager.
+* **Observer Pattern:** `InventoryManager` raises events like `OnSlotUpdated` and `OnActiveSlotIndexChanged`, allowing UI to react without being tightly coupled to inventory logic.
+* **Single Responsibility Principle:** Data management, UI spawning, and individual slot rendering are handled by separate classes.
+* **Interface-Driven Design:** `IStorageSlot` gives slot UI elements a shared contract for refreshing and drag state.
+* **Data-Driven Save/Load:** Inventory saves lightweight slot data using index, item ID, and stack size, then rebuilds `ItemInstance` objects through the `ItemDatabase`.
+* **Separation of Concerns:** The UI displays inventory state, but the manager owns the inventory state.
 
 ---
 
-## Summary
+## 💻 Code Highlight
 
-This inventory system is built around:
-- **centralized state management** through a single inventory manager
-- **separation of static and runtime item data** using `ItemData` and `ItemInstance`
-- **event-driven updates** between inventory, UI, and equipment systems
-- **a unified inventory and hotbar model** using one shared slot array
-- **ScriptableObject-based item definitions** for clean content authoring
-- **ID-based save/load flow** for stable persistence
-- **extensible item behavior** through interfaces and runtime instances
+This method is the core inventory insertion logic. It first tries to merge stackable items into existing stacks, including partial stack fills, before falling back to the first empty slot.
 
-The result is a compact system with clear ownership, reactive UI updates, and a consistent flow between world items, inventory storage, and player interaction.
+A strong design choice is that the method only notifies the UI through events. This allows each component to remain decoupled, and also allows other future systems to easily detect when changes occur in the `Inventory`
+
+The inventory manager only changes the data and announces which slot changed.
+
+```csharp
+public bool AddItems(ItemInstance item)
+{
+    // Try to stack first if the item is stackable
+    if (item.DataSo.IsStackable == true)
+    { 
+        for (int i = 0; i < itemsList.Length; i++)
+        {
+            // Skip empty slots and slots with different items
+            if (itemsList[i] == null || itemsList[i].DataSo != item.DataSo) continue;
+            
+            int spaceLeft = itemsList[i].DataSo.MaxStackSize - itemsList[i].stackSize;
+            
+            // Skip full slots
+            if (spaceLeft <= 0) continue;
+
+            // If whole new stack fits in current slot
+            if (item.stackSize <= spaceLeft)
+            {
+                itemsList[i].stackSize += item.stackSize;
+                OnSlotUpdated?.Invoke(i);
+                OnItemAddedToInventory?.Invoke(item);
+                return true;
+            }
+            // If partial new stack fits in current slow
+            else
+            {
+                itemsList[i].stackSize = itemsList[i].DataSo.MaxStackSize;
+                item.stackSize -= spaceLeft;
+                OnSlotUpdated?.Invoke(i);
+                // Do not return true yet, code continues to find open slot for remainder
+            }
+        }
+    }
+    
+    // If not stackable / No free stack available
+    for (int i = 0; i < itemsList.Length; i++)
+    {
+        if (itemsList[i] == null)
+        {
+            itemsList[i] = item; // Adds the item
+            OnSlotUpdated?.Invoke(i);
+            OnItemAddedToInventory?.Invoke(item);
+            return true;
+        }
+    }
+
+    Debug.unityLogger.Log("Iventory is full");
+    return false; // If inventory is full
+}
+```
+
