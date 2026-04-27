@@ -41,20 +41,20 @@ public class PlayerStatsManager : MonoBehaviour
     private void OnEnable()
     {
         // Catch and discard the broadcasted values as we dont need them here
-        healthComponent.OnHpUpdated += (hp) => UpdateStatsMenu();
-        _manaComponent.OnMpUpdated += (mp) => UpdateStatsMenu();
-        _levelComponent.OnLevelUpdated += (level) => UpdateStatsMenu();
-        _levelComponent.OnExperienceGained += (curr, total) => UpdateStatsMenu();
+        healthComponent.OnHpUpdated += UpdateStatsMenu;
+        _manaComponent.OnMpUpdated += UpdateStatsMenu;
+        _levelComponent.OnLevelUpdated += UpdateStatsMenu;
+        _levelComponent.OnExperienceGained += UpdateStatsMenu;
 
         EventBus.OnEntityDeathRequested += HandleEntityDeath;
     }
     
     private void OnDisable()
     {
-        healthComponent.OnHpUpdated -= (hp) => UpdateStatsMenu();
-        _manaComponent.OnMpUpdated -= (mp) => UpdateStatsMenu();
-        _levelComponent.OnLevelUpdated -= (level) => UpdateStatsMenu();
-        _levelComponent.OnExperienceGained -= (curr, total) => UpdateStatsMenu();
+        healthComponent.OnHpUpdated -= UpdateStatsMenu;
+        _manaComponent.OnMpUpdated -=  UpdateStatsMenu;
+        _levelComponent.OnLevelUpdated -= UpdateStatsMenu;
+        _levelComponent.OnExperienceGained -= UpdateStatsMenu;
         EventBus.OnEntityDeathRequested -= HandleEntityDeath;
     }
 
