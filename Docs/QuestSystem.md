@@ -1,50 +1,45 @@
-# 🛠 System Deep Dive: Modular Quest Framework
+# 🛠 System: Quest System
 
 ## 📝 Overview
-The **Quest System** is a highly modular, event-driven, and data-driven framework designed to handle the complete lifecycle of a player's journey. From quest acceptance and tracking to UI presentation and JSON serialization, the system is built to scale gracefully. 
 
-By leveraging an `EventBus` for global communication and a strict separation of concerns between static data, runtime state, and UI, this system allows designers to build complex, multi-objective quests in the Unity Inspector without writing a single line of code.
+The **Quest System** is a modular, event-driven framework designed to handle the full lifecycle of a player's journey—from discovering and accepting quests to progression tracking and persistent JSON serialization.
 
----
-
-## 🛑 The Challenge: Avoiding the "God Class"
-Quest systems are notorious for turning into monolithic "God Classes." When built poorly, they create hard dependencies across the entire codebase. This architecture specifically targets four common pitfalls:
-
-* **The Dependency Web:** Usually, an enemy's `OnDeath` method calls `QuestManager.Instance.AddKill()`. This couples combat to quests. Here, systems remain "blind" to each other, communicating only through anonymous broadcasts.
-* **The ScriptableObject Mutation Trap:** Beginners often modify `ScriptableObject` fields at runtime (e.g., `questData.currentKills++`). This permanently overwrites the asset on the hard drive. This system treats SOs as **Immutable Blueprints**.
-* **UI Entanglement:** Mixing backend logic with UI code (e.g., updating a Text component inside a progress loop) makes the system rigid. This framework separates the "Live Data" from the "Visual Representation."
-* **Save File Bloat:** Attempting to serialize entire complex quest objects leads to circular reference errors. By separating the **Blueprint** from the **Progress**, we only save a small array of integers per quest.
+The system utilizes a strict separation of concerns, splitting the architecture into three distinct layers: **Static Data** (what the quest is), **Runtime State** (the live progress of the quest), and **UI Presentation** (how the quest looks to the player). By leveraging a central `QuestManager` and an `EventBus`, the system allows designers to build multi-objective quests in the Unity Inspector without writing new code for every unique quest.
 
 ---
 
-## 🏗 The Architecture: A Three-Tier Approach
+## 🛑 The Challenge (The "Problem")
 
-### 🧩 1. The Blueprint Layer (Static & Immutable)
-* **`QuestSo` (ScriptableObject):** The source of truth. It holds read-only metadata: ID, Name, Description, and an array of required objectives.
-* **`QuestObjective` (ScriptableObject):** A modular definition of a task (e.g., "Kill 10 Slimes"). Because these are individual assets, designers can mix and match them into a `QuestSo` via the Inspector.
+Standard quest implementations often result in monolithic scripts where the quest logic is tightly coupled to every enemy, item, or NPC in the game.
 
-### ⚙️ 2. The Runtime Layer (Dynamic State)
-* **`QuestActive` (Standard C# Class):** The **Wrapper Pattern** in action. This class acts as a live, serializable container. It holds a reference to the static `QuestSo` but tracks `int[] ObjectiveProgress` locally. 
-* **`QuestManager` (The Orchestrator):** The central authority. It maintains the master database and the player's active list. it listens to the `EventBus` to process updates and packages data for serialization.
-
-### 🖥️ 3. The Presentation Layer (Visuals)
-* **`QuestUI`:** The manager of the visual list. It listens for backend changes and handles the instantiation of quest entries.
-* **`Quest.cs`:** The UI component attached to a single quest prefab. It maps data from a `QuestActive` instance directly to `TextMeshPro` fields.
+- **Complexity:** Without an event-driven approach, every enemy death or item pickup requires a direct reference to the `QuestManager` to check for progress, leading to a "spaghetti" mess of dependencies.
+- **Data Mutation:** Modifying `ScriptableObject` values directly at runtime (e.g., `questData.currentKills++`) is a common error that leads to permanent data corruption in the Unity Editor and inconsistent behavior in builds.
+- **UI Entanglement:** If quest logic and UI updates are handled in the same script, the system becomes rigid. Adding a new UI element or changing the menu layout would require refactoring the core backend logic.
+- **Scalability:** Hardcoding quest logic forces developers to create new C# scripts for every unique quest type, making the game increasingly difficult to maintain.
 
 ---
 
-## 🔄 System Flow: The Lifecycle of a Quest
+## 🏗 The Architecture (The "Solution")
 
-1.  **Acceptance:** An NPC fires an event: `EventBus.Publish(new QuestRequestEvent("quest_01"))`. The `QuestManager` catches this, fetches the blueprint from the database, wraps it in a new `QuestActive` object, and notifies the UI.
-2.  **Progression:** The player kills a goblin. The goblin script fires `EventBus.Publish(new ObjectiveUpdateEvent("mob_goblin", 1))`. The goblin doesn't know if a quest exists; it just "yells" into the bus. 
-3.  **Validation:** The `QuestManager` hears the yell, finds the relevant `QuestActive` instance, and updates its internal progress array. 
-4.  **Completion:** `QuestActive` evaluates its progress against the blueprint's requirements. Once met, it flags itself as complete, triggering reward or turn-in logic.
+The system is built on a "Layered Data" approach, ensuring that static asset data is never modified and communication between systems remains anonymous.
+
+* **`QuestSo` & `QuestObjective`**: These are the **Static Data** assets. They act as immutable blueprints that define the IDs, names, descriptions, and required target amounts for objectives.
+* **`QuestActive`**: This is the **Runtime Layer**. It is a serializable wrapper class that holds a reference to a `QuestSo` but tracks its own `ObjectiveProgress` array. This keeps the original asset clean while allowing for unique progress tracking per save file.
+* **`QuestManager`**: The **Logic Layer**. It maintains a global quest database, manages the active quest list, handles save/load operations, and listens to the `EventBus` to process global game events into specific objective progress.
+* **`QuestUI` & `Quest.cs`**: The **Presentation Layer**. These scripts are strictly responsible for the visual state, mapping the backend `QuestActive` data to `TextMeshPro` elements in the UI panel.
+
+### 🧩 Patterns & Principles Used:
+
+* **Observer Pattern (EventBus):** Decouples the world from the quests. Enemies and items fire generic "Update" events; the `QuestManager` observes these and decides which active quests are affected.
+* **Wrapper Pattern:** `QuestActive` wraps the `QuestSo` to provide live state tracking without mutating the underlying ScriptableObject asset.
+* **Data-Driven Design:** Quests are composed in the Inspector by dragging `QuestObjective` assets into a `QuestSo`, allowing for non-technical quest creation.
+* **Interface Segregation (`ISaveable`):** The `QuestManager` implements a shared save interface, ensuring it plugs into the persistence pipeline without the `SaveManager` needing specific knowledge of quest logic.
 
 ---
 
-## 💻 Code Highlight 
-### The Wrapper Pattern
-To protect the `ScriptableObject` and facilitate a lightweight Save/Load system, `QuestActive` uses **Constructor Overloading**. This allows the system to generate a fresh quest or reconstruct an existing one from a save file with safety checks.
+## 💻 Code Highlight
+
+The `QuestActive` class is the structural heart of the system. It uses **Constructor Overloading** to provide a clean way to either initialize a brand-new quest or rebuild an existing quest from a save file.
 
 ```csharp
 [System.Serializable]
@@ -54,29 +49,58 @@ public class QuestActive
     public int[] ObjectiveProgress { get; private set; } 
     public bool IsCompleted { get; private set; }
 
-    // Constructor 1: Initializing a BRAND NEW quest
+    // Constructor 1: Setup a BRAND NEW quest from a blueprint
     public QuestActive(QuestSo questData)
     {
         QuestData = questData;
-        // Dynamically size the tracking array based on the SO's requirements
-        ObjectiveProgress = new int[QuestData.QuestObjectives.Length];
+        // Dynamically initialize the progress tracking array to match the SO
+        ObjectiveProgress = new int[QuestData.QuestObjectives.Count];
         IsCompleted = false;
     }
     
-    // Constructor 2: Rebuilding a quest from Save Data (JSON)
-    public QuestActive(QuestSo questData, int[] savedProgress, bool isCompleted)
+    // Constructor 2: Rebuild a quest from Saved Data
+    public QuestActive(QuestSo questData, int[] objectiveProgress, bool isCompleted)
     {
         QuestData = questData;
-        ObjectiveProgress = new int[QuestData.QuestObjectives.Length];
+        ObjectiveProgress = new int[QuestData.QuestObjectives.Count];
 
-        if (savedProgress != null)
+        if (objectiveProgress != null)
         {
-            // Safety Check: Protect against index out of bounds if the 
-            // QuestSO was modified after the player's save was created.
-            int count = Mathf.Min(savedProgress.Length, ObjectiveProgress.Length);
-            Array.Copy(savedProgress, ObjectiveProgress, count);
+            // Safety Check: Ensure we don't go out of bounds if the SO was 
+            // changed after the save was created.
+            int count = Mathf.Min(objectiveProgress.Length, ObjectiveProgress.Length);
+            for (int i = 0; i < count; i++)
+            {
+                ObjectiveProgress[i] = objectiveProgress[i];
+            }
         }
         IsCompleted = isCompleted;
+    }
+}
+```
+
+The `HandleObjectiveUpdate` method in the `QuestManager` showcases the Loose Coupling of the system. It uses string-based `TargetIDs` to resolve progress. Whether the player killed a "Slime" or discovered a "Hidden Cave," the logic remains identical and agnostic to the object type.
+
+```csharp
+private void HandleObjectiveUpdate(string targetID, int amount)
+{
+    foreach (QuestActive questActive in _questList)
+    {
+        if (questActive.IsCompleted) continue; // Performance: Skip quests already done
+        
+        // Check every objective in the quest against the incoming TargetID
+        for (int i = 0; i < questActive.QuestData.QuestObjectives.Count; i++)
+        {
+            if (questActive.QuestData.QuestObjectives[i].TargetID == targetID)
+            {
+                // Logic Layer: Update data
+                questActive.AddObjectiveProgress(i, amount);
+                
+                // Presentation Layer: Notify UI to refresh
+                questUI.UpdateQuestUI(questActive);
+                Debug.Log($"Quest {questActive.QuestData.QuestName} updated.");
+            }
+        }
     }
 }
 ```
