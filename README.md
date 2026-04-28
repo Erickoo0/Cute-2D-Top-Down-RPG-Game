@@ -43,12 +43,12 @@ Below are links to the internal documentation detailing the mechanics, challenge
 | **Interaction System** | Interface-driven interaction framework that detects nearby objects, prioritizes valid targets, and triggers behavior without hard dependencies between systems. | [View Doc](./Docs/InteractionSystem.md) |
 | **Item System** | Three-layer item architecture separating static item definitions, runtime item state, and physical world item behavior for flexible item creation and usage. | [View Doc](./Docs/ItemSystem.md) |
 | **Inventory System** | Slot-based inventory framework that separates stored item data, UI rendering, hotbar behavior, and equipment logic into clean responsibilities. | [View Doc](./Docs/InventorySystem.md) |
-| **Combat System** | Modular combat framework built around reusable damage, targeting, stats, and entity logic designed to support weapons, enemies, and abilities. | [View Doc](./Doc/Combat.md) |
+| **Combat System** | Modular combat framework built around reusable damage, targeting, stats, and entity logic designed to support weapons, enemies, and abilities. | [View Doc](./Doc/CombatSystem.md) |
 | **Stats System** | Event-driven resource and progression architecture for health, mana, level, and future stats while keeping gameplay logic separate from UI display. | [View Doc](./Docs/StatsSystem.md) |
 | **State Machine** | Reusable finite state machine architecture that powers entity behavior such as idle, wandering, chasing, and action states through modular state classes. | [View Doc](./Docs/StateMachineSystem.md) |
 | **Save / Load System** | Persistent game-state system designed to serialize important player, inventory, world, and progression data into JSON, while remaining expandable for future systems. | [View Doc](./Docs/Save&LoadSystem.md) |
-| **Dialogue System** | NPC dialogue framework designed for branching conversations, and event actions to trigger world events and quests. | [View Doc](./Doc/DialogueSystem.md) |
-| **Quest System** | Objective-based quest framework prepared for tracking player progress, NPC interactions, rewards, and progression-driven gameplay. | [View Doc](./Doc/QuestSystem.md) |
+| **Dialogue System** | NPC dialogue framework designed for branching conversations, and event actions to trigger world events and quests. | [View Doc](./Docs/DialogueSystem.md) |
+| **Quest System** | Objective-based quest framework prepared for tracking player progress, NPC interactions, rewards, and progression-driven gameplay. | [View Doc](./Docs/QuestSystem.md) |
 | **WorldTime System** | Centralized world clock system designed to track in-game time, drive day-cycle logic, and provide time-based hooks for future gameplay systems. | [View Doc](./Docs/WorldTimeSystem.md) |
 
 ---
